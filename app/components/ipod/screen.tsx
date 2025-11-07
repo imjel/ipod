@@ -1,7 +1,8 @@
 /**
  * view component that renders based on currentScreen prop
  */
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import ScreenHeader from "./screens/ScreenHeader";
 
 export default function Screen() {
   // const toRender = switch(currentScreen){
@@ -36,7 +37,9 @@ export default function Screen() {
             "--mouse-x": `${mousePosition.x}px`,
             "--mouse-y": `${mousePosition.y}px`
         } as React.CSSProperties}
-        className="screen-class flex items-center justify-center bg-screen border-2 border-screen-border w-64 h-48 shadow-sm">
+        className="screen-class flex justify-center bg-screen border-2 border-screen-border w-64 h-48 shadow-sm"
+    >   
+        <ScreenHeader />
     </div>
   )
 }
