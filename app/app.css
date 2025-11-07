@@ -1,15 +1,26 @@
 @import "tailwindcss";
 
 @theme {
+  
+  /* colors */
+  --color-ipod-blue: #02ABD6;
+  --color-ipod-gray: #E7E9E8;
+  --color-ipod-pink: #D7499B;
+  --color-ipod-green: #AFD157;
+  --color-ipod-black
+  --color-ipod-blue: #02ABD6;
+  --color-ipod-blue-border: #218499;
+  --color-wheel-text: #B3B8BB;
+  --color-select: #2299D7;
+  --color-screen: #EAF7FF;
+
+  /* fonts */
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  
 }
 
 html,
 body {
-  @apply bg-white dark:bg-gray-950;
-
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
+  @apply bg-white;
 }
