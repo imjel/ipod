@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Wheel from "./wheel";
+import Screen from "./screen";
 
 export default function Body() {
   const [currentScreen, setCurrentScreen] = useState("menu");
@@ -27,6 +28,10 @@ export default function Body() {
     <div className="ipod-body relative flex w-[305px] h-[690px] bg-ipod-blue rounded-sm">
       <div className="flex flex-col w-full">
         {/* <Screen /> */}
+        <div className="absolute left-1/2 -translate-x-1/2 mt-[24.5px]">
+        <Screen />
+        </div>
+       
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2">
           <Wheel />
         </div>

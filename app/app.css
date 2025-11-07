@@ -7,12 +7,12 @@
   --color-ipod-gray: #E7E9E8;
   --color-ipod-pink: #D7499B;
   --color-ipod-green: #AFD157;
-  --color-ipod-black
-  --color-ipod-blue: #02ABD6;
+  --color-ipod-black: #0E2632;
   --color-ipod-blue-border: #218499;
   --color-wheel-text: #B3B8BB;
   --color-select: #2299D7;
   --color-screen: #EAF7FF;
+  --color-screen-border: #515A65;
 
   /* fonts */
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
@@ -23,4 +23,24 @@
 html,
 body {
   @apply bg-white;
+}
+
+.screen-class {
+  position: relative;
+  overflow: hidden;
+}
+
+.screen-class::after {
+  content: '';
+  position: absolute;
+  width: 200%;
+  height: 200%;
+	opacity: 0.6;
+	background: linear-gradient(to right, rgba(255, 255, 255, 0.9) 0%, rgba(57, 206, 255, 0.3) 20%, transparent 50%);
+  /* position based on mouse coordinates */
+  left: var(--mouse-x, 0);
+  top: var(--mouse-y, 0);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  transition: left 0.1s ease-out, top 0.1s ease-out;
 }

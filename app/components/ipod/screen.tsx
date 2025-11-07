@@ -1,26 +1,42 @@
 /**
  * view component that renders based on currentScreen prop
  */
-import MenuView from "./screens/MenuView"
+import { useEffect, useRef, useState } from "react";
 
-export default function Screen(currentScreen: string, selectedIndex: number) {
+export default function Screen() {
+  // const toRender = switch(currentScreen){
+  //     case "menu":
+  //         return (
+  //             <MenuView />
+  //         )
+  //         // render menuview
+  //     default:
+  //         return (
+  //             <MenuView />
+  //         )
+  // }
+  const screenRef = useRef<HTMLDivElement>(null);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-    // const toRender = switch(currentScreen){
-    //     case "menu":
-    //         return (
-    //             <MenuView />
-    //         )
-    //         // render menuview
-    //     default:
-    //         return (
-    //             <MenuView />
-    //         )
-    // } 
-        
-    
-    return (
-        <div className="screen">
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!screenRef.current) return;
 
-        </div>
-    )
+    const rect = screenRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    setMousePosition({ x, y });
+  };
+
+  return (
+    <div 
+        ref={screenRef}
+        onMouseMove={handleMouseMove}
+        style={{
+            "--mouse-x": `${mousePosition.x}px`,
+            "--mouse-y": `${mousePosition.y}px`
+        } as React.CSSProperties}
+        className="screen-class flex items-center justify-center bg-screen border-2 border-screen-border w-64 h-48 shadow-sm">
+    </div>
+  )
 }
