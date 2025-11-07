@@ -4,7 +4,7 @@ import Screen from "./screen";
 
 export default function Body() {
   const [currentScreen, setCurrentScreen] = useState("menu");
-  const [index, setIndex] = useState(0);
+  const [delta, setDelta] = useState(0);
   const [menuStack, setMenuStack] = useState(["home"]); // layers of routes
 //   const {user, playlists} = useSpotify();
 
@@ -31,9 +31,16 @@ export default function Body() {
         <div className="absolute left-1/2 -translate-x-1/2 mt-[24.5px]">
         <Screen />
         </div>
-       
+        {/* control wheel */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2">
-          <Wheel />
+          {/* <Wheel 
+            onMenu={handleMenu}
+            onNext={}
+            onPlayPause={}
+            onPrevious={}
+            onScroll={handleScroll}
+            onSelect={handleSelect}
+          /> */}
         </div>
       </div>
     </div>

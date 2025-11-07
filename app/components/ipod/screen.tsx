@@ -3,6 +3,7 @@
  */
 import { useRef, useState } from "react";
 import ScreenHeader from "./screens/ScreenHeader";
+import MenuView from "./screens/MenuView";
 
 export default function Screen() {
   // const toRender = switch(currentScreen){
@@ -37,9 +38,10 @@ export default function Screen() {
             "--mouse-x": `${mousePosition.x}px`,
             "--mouse-y": `${mousePosition.y}px`
         } as React.CSSProperties}
-        className="screen-class flex justify-center bg-screen border-2 border-screen-border w-64 h-48 shadow-sm"
+        className="screen-class justify-center bg-screen border-2 border-screen-border w-64 h-48 shadow-sm"
     >   
         <ScreenHeader />
+        <MenuView />
     </div>
   )
 }
