@@ -12,7 +12,7 @@ import { IoMdPause, IoMdPlay } from "react-icons/io";
 
 export default function Wheel() {
   return (
-    <div className="relative flex items-center justify-center rounded-full bg-white border border-gray-100 w-64 h-64">
+    <div className="relative flex items-center justify-center rounded-full bg-white border-2 border-ipod-blue-border w-64 h-64 shadow-sm">
       <button className="absolute top-2 left-1/2 -translate-x-1/2 text-wheel-text text-md font-semibold">
         MENU
       </button>
