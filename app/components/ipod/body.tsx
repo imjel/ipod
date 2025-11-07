@@ -5,6 +5,7 @@ export default function Body() {
   const [currentScreen, setCurrentScreen] = useState("menu");
   const [index, setIndex] = useState(0);
   const [menuStack, setMenuStack] = useState(["home"]); // layers of routes
+//   const {user, playlists} = useSpotify();
 
   // const handleScroll = (index: number) => {
   //     setIndex(prev => {
@@ -23,10 +24,12 @@ export default function Body() {
   };
 
   return (
-    <div className="ipod-body flex w-full bg-blue-500 rounded-xl">
-      <div className="flex flex-col">
-        {/* screen goes here */}
-        <Wheel />
+    <div className="ipod-body relative flex w-[305px] h-[690px] bg-ipod-blue rounded-sm">
+      <div className="flex flex-col w-full">
+        {/* <Screen /> */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2">
+          <Wheel />
+        </div>
       </div>
     </div>
   );
