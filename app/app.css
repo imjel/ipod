@@ -35,12 +35,24 @@ body {
   position: absolute;
   width: 200%;
   height: 200%;
-	opacity: 0.6;
-	background: linear-gradient(to right, rgba(255, 255, 255, 0.9) 0%, rgba(138, 219, 246, 0.3) 20%, transparent 50%);
+	opacity: 0.7;
+	background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.927) 0%, rgba(102, 209, 245, 0.3) 20%, transparent 50%);
   /* position based on mouse coordinates */
   left: var(--mouse-x, 0);
   top: var(--mouse-y, 0);
   transform: translate(-50%, -50%);
   pointer-events: none;
   transition: left 0.1s ease-out, top 0.1s ease-out;
+}
+
+.battery-border-gradient {
+  border: 2x solid;
+  border-image-slice: 1;
+  border-width: 1px;
+}
+.battery-border-gradient-slate {
+  border-image-source: linear-gradient(to bottom, #475569, #5e6b7e, #768294, #8f9aab, #a8b3c2, #a8b3c2, #a8b3c2, #a8b3c2, #8f9aab, #768294, #5e6b7e, #475569);;
+}
+.battery-gradient {
+  background-image: linear-gradient(to bottom, #65a30d, #75b122, #86c033, #96cf42, #a7de51, #a7de51, #a7de51, #a7de51, #96cf42, #86c033, #75b122, #65a30d);
 }
