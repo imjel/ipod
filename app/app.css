@@ -17,13 +17,26 @@
   /* fonts */
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
     "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  
+
+  /* shading */
+  --color-ipod-blue-light: #4FC3E8;
+  --color-ipod-blue-dark: #016A86;
+  --color-ipod-blue-shadow: #014B5F;
+
+  --color-screen: #EAF7FF;
+  --color-screen-dark: #bcc7cf;
+  --color-screen-light: #f0f6fa;
+
+  --highlight-opacity: 0.3;
+  --shadow-opacity: 0.4;
 }
 
 html,
 body {
   @apply bg-white;
 }
+
+/* ---- IPOD ---- */
 
 .ipod-scene {
   perspective: 500px;
@@ -42,6 +55,9 @@ body {
   position: absolute;
   background-color: var(--color-ipod-blue);
   border-radius: 6px;
+  box-shadow: 
+    inset 0 1px 2px rgba(255,255,255, var(--highlight-opacity)),  /* top edge */
+    inset 0 -1px 2px rgba(0,0,0, var(--shadow-opacity));          /* bottom edge */
 }
 
 .ipod-body-front,
@@ -79,7 +95,7 @@ body {
 .ipod-body-top   { transform: rotateX( 90deg) translateZ(345px); } /* translateZ = height/2 */
 .ipod-body-bottom { transform: rotateX(-90deg) translateZ(345px); }
 
-/* translatez and rotate values are the opposites of their corresponding face - reverse face transform*/
+/* translateZ and rotate values are the opposites of their corresponding face - reverse face transform*/
 .ipod.show-front { transform: translateZ( -50px) rotateY(0deg); }
 .ipod.show-back { transform: translateZ(-50px) rotateY(-180deg); }
 .ipod.show-right { transform: translateZ(-152.5px) rotateY(-90deg); }
@@ -87,22 +103,39 @@ body {
 .ipod.show-top { transform: translateZ(-345px) rotateX(-90deg); }
 .ipod.show-bottom { transform: translateZ(-345px) rotateX(90deg); }
 
+/* shading */
+.ipod-body-front {
+  background: 
+    radial-gradient(ellipse 50% 20% at 50% 70%, var(--color-ipod-blue-light), transparent 60%),
+    linear-gradient(90deg, var(--color-ipod-blue-light) 0%, transparent 2%, transparent 95%, var(--color-ipod-blue-light) 98%, var(--color-ipod-blue-dark) 100% ),
+    linear-gradient(270deg, var(--color-ipod-blue-light) 0%, transparent 5%, transparent 90%, var(--color-ipod-blue-light) 96%, var(--color-ipod-blue-dark) 100%),
+    var(--color-ipod-blue);
+}
+
+/* ---- SCREEN ---- */
+
 .screen-class {
   position: relative;
   overflow: hidden;
+  background: 
+    linear-gradient(90deg, var(--color-screen-light) 0%, var(--color-screen) 95%, var(--color-screen-light) 98%, var(--color-screen-dark) 100% ),
+    var(--color-screen);
 }
 
 .screen-overlay {
   position: absolute;
   top: -100%;
   left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.927) 0%, rgba(43, 185, 232, 0.5) 20%, rgba(255, 255, 255, 0.927) 0%, rgba(43, 185, 232, 0.5) 20%, transparent 50%);
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.927) 10%, rgba(43, 185, 232, 0.5) 20%, rgba(255, 255, 255, 0.927) 30%,  transparent 40%, rgba(43, 185, 232, 0.5) 60%, rgba(255, 255, 255, 0.927) 70%, transparent 100%);
   transition: transform 200ms ease-out;
-  filter: brightness(.85) contrast(2.75) saturate(.65);
-  opacity: 50%;
+  filter: brightness(.85) contrast(2.5) saturate(.65);
+  opacity: 30%;
+  pointer-events: none;
 }
+
+/* ---- BATTERY ---- */
 
 .battery-border-gradient {
   border: 2x solid;

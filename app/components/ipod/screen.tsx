@@ -59,7 +59,7 @@ export default function Screen() {
     <div 
         ref={screenRef}
         onMouseMove={handleMouseMove}
-        className="screen-class justify-center bg-screen border-2 border-screen-border w-64 h-48 shadow-sm"
+        className="screen-class justify-center bg-screen border-2 border-screen-border w-64 h-48 shadow-[inset_0_-1px_2px_rgba(0,0,0,0.4)]"
     >   
         <ScreenHeader />
         <MenuView />
