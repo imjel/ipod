@@ -1,32 +1,83 @@
 import { useState } from "react";
 import Wheel from "./wheel";
 import Screen from "./screen";
-
-type SideEnum = "front" | "back" | "right" | "left" | "top" | "bottom";
+import { type SideEnum, menuItems } from "./types";
 
 export default function Body() {
-  const [currentScreen, setCurrentScreen] = useState("menu");
-  const [delta, setDelta] = useState(0);
+  const [currentScreen, setCurrentScreen] = useState("home");
   const [menuStack, setMenuStack] = useState(["home"]); // layers of routes
   const [currentSide, setCurrentSide] = useState<SideEnum>("front");
+  const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [isPlaying, setIsPlaying] = useState(false);
+  // const [currentSong, setCurrentSong] = useState
+
 
   //   const {user, playlists} = useSpotify();
 
-  // const handleScroll = (index: number) => {
-  //     setIndex(prev => {
-  //         /** implement scroll logic */
-  //     })
-  // }
-
   const handleSelect = () => {
     // navigation
+    if (selectedIndex === -1 ) return;
+    const currentItem = menuItems[currentScreen][selectedIndex];
+    switch (currentItem.type) {
+      case "submenu":
+        setMenuStack(prev => [...prev, currentItem.route]);
+        setCurrentScreen(currentItem.route);
+        setSelectedIndex(-1);
+        break;
+      case "action":
+        currentItem.action();
+        break;
+      case "song":
+        // play song from spotify player
+      break;
+    }
   };
 
   const handleMenu = () => {
     // send user back to the previous menu
-    setMenuStack((prev) => prev.slice(0, -1));
-    setCurrentScreen(menuStack[menuStack.length - 2]);
+    if (menuStack.length > 1) {
+      setMenuStack((prev) => prev.slice(0, -1));
+      setCurrentScreen(menuStack[menuStack.length - 2]);
+      setSelectedIndex(0);
+    } else {
+      return;
+    }
   };
+
+  // delta from wheel onScroll useCallback
+  const handleScroll = (delta: number) => {
+    const items = menuItems[currentScreen] || [];
+    if (selectedIndex === -1) {
+      //first scroll, so select the first item
+      setSelectedIndex(0);
+    } else {
+      const newIndex = selectedIndex + delta;
+      const clampedIndex = Math.max(0, Math.min(newIndex, items.length - 1));
+      setSelectedIndex(clampedIndex);
+    }
+  };
+
+
+  const handlePlayPause = () => {
+    isPlaying ? setIsPlaying(false) : setIsPlaying(true);
+    // when spotify api is added, call play or pause on player
+    // update ui
+  };
+
+  const handleNext = () => {
+    if (isPlaying) {
+      // skip to next track and set currentSong
+      // setCurrentSong(newSong)
+    }
+  };
+
+  const handlePrev = () => {
+    if (isPlaying) {
+      // go back to previous track or restart current song if >3s in
+      // setCurrentSong(prevSong)
+    }
+  };
+
 
   const handleSideChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentSide(e.target.value as SideEnum);
@@ -39,18 +90,22 @@ export default function Body() {
           <div className="flex flex-col w-full">
             {/* <Screen /> */}
             <div className="absolute left-1/2 -translate-x-1/2 mt-[24.5px]">
-              <Screen />
+              <Screen 
+                selectedIndex={selectedIndex} 
+                currentScreen={currentScreen} 
+                onHover={setSelectedIndex}
+              />
             </div>
             {/* control wheel */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2">
-              {/* <Wheel 
-            onMenu={handleMenu}
-            onNext={}
-            onPlayPause={}
-            onPrevious={}
-            onScroll={handleScroll}
-            onSelect={handleSelect}
-          /> */}
+            <div className="absolute top-[47%] left-1/2 -translate-x-1/2">
+              <Wheel
+                onMenu={handleMenu}
+                onNext={handleNext}
+                onPlayPause={handlePlayPause}
+                onPrevious={handlePrev}
+                onScroll={handleScroll}
+                onSelect={handleSelect}
+              />
             </div>
           </div>
         </div>

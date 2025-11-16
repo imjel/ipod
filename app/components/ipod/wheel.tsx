@@ -9,7 +9,7 @@
  */
 import { FaFastForward, FaFastBackward } from "react-icons/fa";
 import { IoMdPause, IoMdPlay } from "react-icons/io";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import type {MouseEvent} from "react";
 
 interface WheelProps {
@@ -32,8 +32,9 @@ export default function Wheel({
   const [scrolling, setScrolling] = useState(false);
   const wheelRef = useRef<HTMLDivElement>(null);
   const lastAngleRef = useRef<number>(0);
+  const timer = useRef<boolean | null>(null);
 
-  // get angle from the center of the wheel
+  // get mouse angle from the center of the wheel
   const getAngle = (clientX: number, clientY: number): number => {
     if (!wheelRef.current) return 0;
     
@@ -41,7 +42,7 @@ export default function Wheel({
     const centerX = rect.left + rect.width / 2;
     const centerY = rect.top + rect.height / 2;
 
-    // change in x and y from client to center of wheel
+    // change in x and y from client's mouse to center of wheel
     const deltaX = clientX - centerX;
     const deltaY = clientY - centerY;
 
@@ -56,6 +57,9 @@ export default function Wheel({
   };
 
   const handleWheelMove = (clientX: number, clientY: number) => {
+    if(!scrolling) console.log("not scrolling");
+    if(!onScroll) console.log("no onScroll");
+
     if(!scrolling || !onScroll) return;
 
     const currentAngle = getAngle(clientX, clientY);
@@ -65,9 +69,10 @@ export default function Wheel({
     if (delta > 180) delta -= 360;
     if (delta < -180) delta += 360;
 
-    // scroll event if movement is notable/should cause scroll
+    // scroll event if movement is notable/should cause scroll (over 10deg)
     if (Math.abs(delta) > 10) {
-      onScroll(delta > 0 ? 1 : -1);
+      console.log("debug: scroll!", delta > 0 ? 1 : -1);
+      onScroll(delta > 0 ? 1 : -1); // scroll +1 for clockwise, -1 counter-clockwise
       lastAngleRef.current = currentAngle;
     }
   };
@@ -76,8 +81,35 @@ export default function Wheel({
     setScrolling(false);
   };
 
+    // detect scroll (wheel events) -- have to use a useEffect to prevent default scrolling bc React 
+    useEffect(() => {
+      const wheelElement = wheelRef.current;
+      if (!wheelElement) return;
+  
+      const handleWheel = (e: WheelEvent) => {
+        e.preventDefault();
+        if (!onScroll) return;
+        if (timer.current) return;
+    
+        timer.current = true;
+        setTimeout(() => {
+          timer.current = false;
+        }, 100);
+    
+        // positive deltaY = scroll down, negative = scroll up; +1 clockwise, -1 counterclockwise
+        onScroll(e.deltaY > 0 ? 1 : -1);
+      };
+  
+      wheelElement.addEventListener("wheel", handleWheel, {passive: false});
+      return () => {
+        wheelElement.removeEventListener("wheel", handleWheel);
+      }
+    }, [onScroll]);
+
   // mouse events
   const handleMouseDown = (e: MouseEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    console.log("debug: mouse down", e.target);
     handleWheelStart(e.clientX, e.clientY);
   };
 
@@ -89,35 +121,33 @@ export default function Wheel({
     handleWheelEnd();
   }
 
-  // touch events for mobile
-
   return (
     <div 
       ref={wheelRef} 
-      className="relative flex items-center justify-center rounded-full bg-white border-2 border-ipod-blue-border w-64 h-64 shadow-sm select-none"
+      className="wheel relative flex items-center justify-center rounded-full bg-white border-2 border-ipod-blue-border w-62 h-62 shadow-sm select-none"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseUp}
       onMouseUp={handleMouseUp}
     >
       {/*Buttons */}
-      <button className="absolute top-2 left-1/2 -translate-x-1/2 text-wheel-text text-md font-semibold" onClick={onMenu}>
+      <button className="absolute top-2.5 left-1/2 -translate-x-1/2 text-wheel-text text-lg font-semibold" onClick={onMenu}>
         MENU
       </button>
-      <button className="absolute right-2 bottom-1/2 translate-y-1/2 text-wheel-text" onClick={onNext}> 
-        {<FaFastForward size={22} className="text-wheel-text " />}
+      <button className="absolute right-3 bottom-1/2 translate-y-1/2 text-wheel-text" onClick={onNext}> 
+        {<FaFastForward size={20} className="text-wheel-text " />}
       </button>
-      <button className="absolute left-2 bottom-1/2 translate-y-1/2" onClick={onPrevious}>
-        {<FaFastBackward size={22} className="text-wheel-text" />}
+      <button className="absolute left-3 bottom-1/2 translate-y-1/2" onClick={onPrevious}>
+        {<FaFastBackward size={20} className="text-wheel-text" />}
       </button>
-      <button className="absolute bottom-2 left-1/2 -translate-x-1/2 text-md" onClick={onPlayPause}>
+      <button className="absolute bottom-2.5 left-1/2 -translate-x-1/2 text-md" onClick={onPlayPause}>
         <span className="flex flex-row">
-          <IoMdPlay size={20} className="text-wheel-text" />
-          <IoMdPause size={20} className="text-wheel-text" />
+          <IoMdPlay size={18} className="text-wheel-text" />
+          <IoMdPause size={18} className="text-wheel-text" />
         </span>
       </button>
       {/* select button */}
-      <button className="rounded-full bg-ipod-blue w-32 h-32" onClick={onSelect} />
+      <button className="wheel-select-button rounded-full bg-ipod-blue w-28 h-28" onClick={onSelect} />
     </div>
   );
 }
