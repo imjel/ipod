@@ -25,36 +25,83 @@ body {
   @apply bg-white;
 }
 
+.ipod-scene {
+  perspective: 500px;
+}
+
+.ipod {
+  width: 305px;
+  height: 690px;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: translateZ(-50px);
+  transition: transform 1s;
+}
+
+.ipod-body {
+  position: absolute;
+  background-color: var(--color-ipod-blue);
+  border-radius: 6px;
+}
+
+.ipod-body-front,
+.ipod-body-back {
+  width: 305px;
+  height: 690px;
+}
+
+.ipod-body-left,
+.ipod-body-right {
+  width: 50px;
+  height: 690px;
+  left: 127.5px; /* (width - 50) / 2 */
+}
+
+.ipod-body-top {
+  width: 305px;
+  height: 50px;
+  top: 320px; /* (height - 50px) / 2 */
+}
+
+.ipod-body-bottom {
+  width: 305px;
+  height: 50px;
+  top: 320px;
+}
+
+
+.ipod-body-front  { transform: rotateY(0deg) translateZ( 25px); } /* translateZ = depth(l/r side width)/2 */
+.ipod-body-back   { transform: rotateY(180deg) translateZ( 25px); }
+
+.ipod-body-right  { transform: rotateY( 90deg) translateZ(152.5px); } /* translateY = width/2 */
+.ipod-body-left   { transform: rotateY(-90deg) translateZ(152.5px); }
+
+.ipod-body-top   { transform: rotateX( 90deg) translateZ(345px); } /* translateZ = height/2 */
+.ipod-body-bottom { transform: rotateX(-90deg) translateZ(345px); }
+
+/* translatez and rotate values are the opposites of their corresponding face - reverse face transform*/
+.ipod.show-front { transform: translateZ( -50px) rotateY(0deg); }
+.ipod.show-back { transform: translateZ(-50px) rotateY(-180deg); }
+.ipod.show-right { transform: translateZ(-152.5px) rotateY(-90deg); }
+.ipod.show-left { transform: translateZ(-152.5px) rotateY(90deg); }
+.ipod.show-top { transform: translateZ(-345px) rotateX(-90deg); }
+.ipod.show-bottom { transform: translateZ(-345px) rotateX(90deg); }
+
 .screen-class {
   position: relative;
   overflow: hidden;
 }
 
-/* .screen-class::after {
-  content: '';
-  position: absolute;
-  width: 200%;
-  height: 200%;
-	opacity: 0.7;
-	background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.927) 0%, rgba(43, 185, 232, 0.3) 20%, transparent 50%);
-  /* position based on mouse coordinates */
-  /* left: var(--mouse-x, 0);
-  top: var(--mouse-y, 0); */
-  /* transform: translate3d(calc(var(--mouse-x) - 50%), calc(var(--mouse-y) - 50%), 0%); take mouse x/y val and subtract 50 */
-  /* transform: translate3d(var(--mouse-x), var(--mouse-y), 0%); /*take mouse x/y val and subtract 50*/
-  /* pointer-events: none;
-  /* transition: left 0.1s ease-out, top 0.1s ease-out; */
-  /*transition: transform 100ms ease-out;
-} */
-
 .screen-overlay {
   position: absolute;
   top: -100%;
   left: -100%;
-  width: 150%;
-  height: 150%;
-  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.927), rgba(0, 139, 186, 0.3), rgba(255, 255, 255, 0.927), transparent 50%);
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.927) 0%, rgba(43, 185, 232, 0.5) 20%, rgba(255, 255, 255, 0.927) 0%, rgba(43, 185, 232, 0.5) 20%, transparent 50%);
   transition: transform 200ms ease-out;
+  filter: brightness(.85) contrast(2.75) saturate(.65);
+  opacity: 50%;
 }
 
 .battery-border-gradient {
