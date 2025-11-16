@@ -24,7 +24,7 @@
   --color-ipod-blue-shadow: #014B5F;
 
   --color-screen: #EAF7FF;
-  --color-screen-dark: #bcc7cf;
+  --color-screen-dark: #959fa6;
   --color-screen-light: #f0f6fa;
 
   --highlight-opacity: 0.3;
@@ -104,11 +104,33 @@ body {
 .ipod.show-bottom { transform: translateZ(-345px) rotateX(90deg); }
 
 /* shading */
-.ipod-body-front {
+.ipod-body-front, .ipod-body-back {
   background: 
     radial-gradient(ellipse 50% 20% at 50% 70%, var(--color-ipod-blue-light), transparent 60%),
-    linear-gradient(90deg, var(--color-ipod-blue-light) 0%, transparent 2%, transparent 95%, var(--color-ipod-blue-light) 98%, var(--color-ipod-blue-dark) 100% ),
-    linear-gradient(270deg, var(--color-ipod-blue-light) 0%, transparent 5%, transparent 90%, var(--color-ipod-blue-light) 96%, var(--color-ipod-blue-dark) 100%),
+    linear-gradient(90deg, var(--color-ipod-blue-light) 0%, transparent 1%, transparent 95%, var(--color-ipod-blue-light) 98%, var(--color-ipod-blue-dark) 100% ),
+    linear-gradient(270deg, var(--color-ipod-blue-light) 0%, transparent 5%, transparent 93%, var(--color-ipod-blue-light) 95%, var(--color-ipod-blue-dark) 100%),
+    var(--color-ipod-blue);
+}
+
+.ipod-body-top, .ipod-body-bottom {
+  background: var(--color-ipod-blue);
+}
+
+.ipod-body-top::after, .ipod-body-bottom::after {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  background: 
+    radial-gradient(ellipse 100% 100% at 50% 50%, #fff, transparent 60%),
+    #dae3e6;
+  border-radius: 10px; /* adjust for inner corners */
+}
+
+.ipod-body-left, .ipod-body-right {
+  background: 
+    radial-gradient(ellipse 150% 90% at 50% 120%, var(--color-ipod-blue-dark), transparent 30%),
+    linear-gradient(90deg, var(--color-ipod-blue-light) 0%, transparent 5%, transparent 80%, var(--color-ipod-blue-light) 90%, var(--color-ipod-blue-dark) 100% ),
+    linear-gradient(270deg, var(--color-ipod-blue-light) 0%, transparent 5%, transparent 75%, var(--color-ipod-blue-light) 90%, var(--color-ipod-blue-dark) 100%),
     var(--color-ipod-blue);
 }
 
@@ -118,7 +140,8 @@ body {
   position: relative;
   overflow: hidden;
   background: 
-    linear-gradient(90deg, var(--color-screen-light) 0%, var(--color-screen) 95%, var(--color-screen-light) 98%, var(--color-screen-dark) 100% ),
+    linear-gradient(90deg, var(--color-screen-light) 0%, transparent 95%, var(--color-screen-light) 98%, var(--color-screen-dark) 100% ),
+    linear-gradient(270deg, var(--color-screen-light) 0%, transparent 5%, transparent 90%, var(--color-screen-dark) 100%),
     var(--color-screen);
 }
 
