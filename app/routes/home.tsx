@@ -1,5 +1,4 @@
 import type { Route } from "./+types/home";
-import { Welcome } from "../welcome/welcome";
 import Body from "~/components/ipod/body";
 
 export function meta({}: Route.MetaArgs) {
