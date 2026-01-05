@@ -13,7 +13,7 @@ export default function MenuView({
       <ul className="cursor-pointer">
         {items.map((item, index) => (
           <li
-            className={`flex flex-row justify-between px-1 items-center ${index === selectedIndex ? "bg-select text-white" : "hover:bg-select hover:text-white"}`}
+            className={`flex flex-row justify-between px-1 items-center font-regular font-helvetica ${index === selectedIndex ? "bg-select text-white" : "hover:bg-select hover:text-white"}`}
             key={item.label}
             onMouseEnter={() => onHover?.(index)}
           >
