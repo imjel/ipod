@@ -1,31 +1,31 @@
 @import "tailwindcss";
 
 @theme {
-  
   /* colors */
-  --color-ipod-blue: #02ABD6;
-  --color-ipod-gray: #E7E9E8;
-  --color-ipod-pink: #D7499B;
-  --color-ipod-green: #AFD157;
-  --color-ipod-black: #0E2632;
+  --color-ipod-blue: #02abd6;
+  --color-ipod-gray: #e7e9e8;
+  --color-ipod-pink: #d7499b;
+  --color-ipod-green: #afd157;
+  --color-ipod-black: #0e2632;
   --color-ipod-blue-border: #218499;
-  --color-wheel-text: #B3B8BB;
-  --color-select: #2299D7;
-  --color-screen: #EAF7FF;
-  --color-screen-border: #515A65;
+  --color-wheel-text: #b3b8bb;
+  --color-select: #2299d7;
+  --color-screen: #eaf7ff;
+  --color-screen-border: #515a65;
 
   /* fonts */
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-helvetica: "Helvetica", sans-serif;
   --font-helvetica-italic: "Helvetica-It", sans-serif;
 
   /* shading */
-  --color-ipod-blue-light: #4FC3E8;
-  --color-ipod-blue-dark: #016A86;
-  --color-ipod-blue-shadow: #014B5F;
+  --color-ipod-blue-light: #4fc3e8;
+  --color-ipod-blue-dark: #016a86;
+  --color-ipod-blue-shadow: #014b5f;
 
-  --color-screen: #EAF7FF;
+  --color-screen: #eaf7ff;
   --color-screen-dark: #959fa6;
   --color-screen-light: #f0f6fa;
 
@@ -34,29 +34,29 @@
 }
 
 @font-face {
-  font-family: 'Helvetica';
-  src: url('public/fonts/HelveticaNeueRoman.otf') format('opentype');
+  font-family: "Helvetica";
+  src: url("public/fonts/HelveticaNeueRoman.otf") format("opentype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'Helvetica-It';
-  src: url('public/fonts/HelveticaNeueItalic.ttf') format('truetype');
+  font-family: "Helvetica-It";
+  src: url("public/fonts/HelveticaNeueItalic.ttf") format("truetype");
   font-weight: normal;
   font-style: italic;
 }
 
 @font-face {
-  font-family: 'Helvetica';
-  src: url('public/fonts/HelveticaNeueBold.otf') format('opentype');
+  font-family: "Helvetica";
+  src: url("public/fonts/HelveticaNeueBold.otf") format("opentype");
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: "Helvetica";
-  src: url('public/fonts/HelveticaNeueMedium.otf') format('opentype');
+  src: url("public/fonts/HelveticaNeueMedium.otf") format("opentype");
   font-weight: 500;
   font-style: normal;
 }
@@ -85,9 +85,9 @@ body {
   position: absolute;
   background-color: var(--color-ipod-blue);
   border-radius: 6px;
-  box-shadow: 
-    inset 0 1px 2px rgba(255,255,255, var(--highlight-opacity)),  /* top edge */
-    inset 0 -1px 2px rgba(0,0,0, var(--shadow-opacity));          /* bottom edge */
+  box-shadow:
+    inset 0 1px 2px rgba(255, 255, 255, var(--highlight-opacity)),
+    /* top edge */ inset 0 -1px 2px rgba(0, 0, 0, var(--shadow-opacity)); /* bottom edge */
 }
 
 .ipod-body-front,
@@ -115,52 +115,115 @@ body {
   top: 320px;
 }
 
+.ipod-body-front {
+  transform: rotateY(0deg) translateZ(25px);
+} /* translateZ = depth(l/r side width)/2 */
+.ipod-body-back {
+  transform: rotateY(180deg) translateZ(25px);
+}
 
-.ipod-body-front  { transform: rotateY(0deg) translateZ( 25px); } /* translateZ = depth(l/r side width)/2 */
-.ipod-body-back   { transform: rotateY(180deg) translateZ( 25px); }
+.ipod-body-right {
+  transform: rotateY(90deg) translateZ(152.5px);
+} /* translateY = width/2 */
+.ipod-body-left {
+  transform: rotateY(-90deg) translateZ(152.5px);
+}
 
-.ipod-body-right  { transform: rotateY( 90deg) translateZ(152.5px); } /* translateY = width/2 */
-.ipod-body-left   { transform: rotateY(-90deg) translateZ(152.5px); }
-
-.ipod-body-top   { transform: rotateX( 90deg) translateZ(345px); } /* translateZ = height/2 */
-.ipod-body-bottom { transform: rotateX(-90deg) translateZ(345px); }
+.ipod-body-top {
+  transform: rotateX(90deg) translateZ(345px);
+} /* translateZ = height/2 */
+.ipod-body-bottom {
+  transform: rotateX(-90deg) translateZ(345px);
+}
 
 /* translateZ and rotate values are the opposites of their corresponding face - reverse face transform*/
-.ipod.show-front { transform: translateZ( -50px) rotateY(0deg); }
-.ipod.show-back { transform: translateZ(-50px) rotateY(-180deg); }
-.ipod.show-right { transform: translateZ(-152.5px) rotateY(-90deg); }
-.ipod.show-left { transform: translateZ(-152.5px) rotateY(90deg); }
-.ipod.show-top { transform: translateZ(-345px) rotateX(-90deg); }
-.ipod.show-bottom { transform: translateZ(-345px) rotateX(90deg); }
+.ipod.show-front {
+  transform: translateZ(-50px) rotateY(0deg);
+}
+.ipod.show-back {
+  transform: translateZ(-50px) rotateY(-180deg);
+}
+.ipod.show-right {
+  transform: translateZ(-152.5px) rotateY(-90deg);
+}
+.ipod.show-left {
+  transform: translateZ(-152.5px) rotateY(90deg);
+}
+.ipod.show-top {
+  transform: translateZ(-345px) rotateX(-90deg);
+}
+.ipod.show-bottom {
+  transform: translateZ(-345px) rotateX(90deg);
+}
 
 /* shading */
-.ipod-body-front, .ipod-body-back {
-  background: 
-    radial-gradient(ellipse 50% 20% at 50% 70%, var(--color-ipod-blue-light), transparent 60%),
-    linear-gradient(90deg, var(--color-ipod-blue-light) 0%, transparent 1%, transparent 95%, var(--color-ipod-blue-light) 98%, var(--color-ipod-blue-dark) 100% ),
-    linear-gradient(270deg, var(--color-ipod-blue-light) 0%, transparent 5%, transparent 93%, var(--color-ipod-blue-light) 95%, var(--color-ipod-blue-dark) 100%),
+.ipod-body-front,
+.ipod-body-back {
+  background:
+    radial-gradient(
+      ellipse 50% 20% at 50% 70%,
+      var(--color-ipod-blue-light),
+      transparent 60%
+    ),
+    linear-gradient(
+      90deg,
+      var(--color-ipod-blue-light) 0%,
+      transparent 1%,
+      transparent 95%,
+      var(--color-ipod-blue-light) 98%,
+      var(--color-ipod-blue-dark) 100%
+    ),
+    linear-gradient(
+      270deg,
+      var(--color-ipod-blue-light) 0%,
+      transparent 5%,
+      transparent 93%,
+      var(--color-ipod-blue-light) 95%,
+      var(--color-ipod-blue-dark) 100%
+    ),
     var(--color-ipod-blue);
 }
 
-.ipod-body-top, .ipod-body-bottom {
+.ipod-body-top,
+.ipod-body-bottom {
   background: var(--color-ipod-blue);
 }
 
-.ipod-body-top::after, .ipod-body-bottom::after {
-  content: '';
+.ipod-body-top::after,
+.ipod-body-bottom::after {
+  content: "";
   position: absolute;
   inset: 8px;
-  background: 
+  background:
     radial-gradient(ellipse 100% 100% at 50% 50%, #fff, transparent 60%),
     #dae3e6;
   border-radius: 10px; /* adjust for inner corners */
 }
 
-.ipod-body-left, .ipod-body-right {
-  background: 
-    radial-gradient(ellipse 150% 90% at 50% 120%, var(--color-ipod-blue-dark), transparent 30%),
-    linear-gradient(90deg, var(--color-ipod-blue-light) 0%, transparent 5%, transparent 80%, var(--color-ipod-blue-light) 90%, var(--color-ipod-blue-dark) 100% ),
-    linear-gradient(270deg, var(--color-ipod-blue-light) 0%, transparent 5%, transparent 75%, var(--color-ipod-blue-light) 90%, var(--color-ipod-blue-dark) 100%),
+.ipod-body-left,
+.ipod-body-right {
+  background:
+    radial-gradient(
+      ellipse 150% 90% at 50% 120%,
+      var(--color-ipod-blue-dark),
+      transparent 30%
+    ),
+    linear-gradient(
+      90deg,
+      var(--color-ipod-blue-light) 0%,
+      transparent 5%,
+      transparent 80%,
+      var(--color-ipod-blue-light) 90%,
+      var(--color-ipod-blue-dark) 100%
+    ),
+    linear-gradient(
+      270deg,
+      var(--color-ipod-blue-light) 0%,
+      transparent 5%,
+      transparent 75%,
+      var(--color-ipod-blue-light) 90%,
+      var(--color-ipod-blue-dark) 100%
+    ),
     var(--color-ipod-blue);
 }
 
@@ -169,9 +232,21 @@ body {
 .screen-class {
   position: relative;
   overflow: hidden;
-  background: 
-    linear-gradient(90deg, var(--color-screen-light) 0%, transparent 95%, var(--color-screen-light) 98%, var(--color-screen-dark) 100% ),
-    linear-gradient(270deg, var(--color-screen-light) 0%, transparent 5%, transparent 90%, var(--color-screen-dark) 100%),
+  background:
+    linear-gradient(
+      90deg,
+      var(--color-screen-light) 0%,
+      transparent 95%,
+      var(--color-screen-light) 98%,
+      var(--color-screen-dark) 100%
+    ),
+    linear-gradient(
+      270deg,
+      var(--color-screen-light) 0%,
+      transparent 5%,
+      transparent 90%,
+      var(--color-screen-dark) 100%
+    ),
     var(--color-screen);
 }
 
@@ -181,9 +256,18 @@ body {
   left: -100%;
   width: 200%;
   height: 200%;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.927) 10%, rgba(43, 185, 232, 0.5) 20%, rgba(255, 255, 255, 0.927) 30%,  transparent 40%, rgba(43, 185, 232, 0.5) 60%, rgba(255, 255, 255, 0.927) 70%, transparent 100%);
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.927) 10%,
+    rgba(43, 185, 232, 0.5) 20%,
+    rgba(255, 255, 255, 0.927) 30%,
+    transparent 40%,
+    rgba(43, 185, 232, 0.5) 60%,
+    rgba(255, 255, 255, 0.927) 70%,
+    transparent 100%
+  );
   transition: transform 200ms ease-out;
-  filter: brightness(.85) contrast(2.5) saturate(.65);
+  filter: brightness(0.85) contrast(2.5) saturate(0.65);
   opacity: 30%;
   pointer-events: none;
 }
@@ -196,8 +280,36 @@ body {
   border-width: 1px;
 }
 .battery-border-gradient-slate {
-  border-image-source: linear-gradient(to bottom, #475569, #5e6b7e, #768294, #8f9aab, #a8b3c2, #a8b3c2, #a8b3c2, #a8b3c2, #8f9aab, #768294, #5e6b7e, #475569);;
+  border-image-source: linear-gradient(
+    to bottom,
+    #475569,
+    #5e6b7e,
+    #768294,
+    #8f9aab,
+    #a8b3c2,
+    #a8b3c2,
+    #a8b3c2,
+    #a8b3c2,
+    #8f9aab,
+    #768294,
+    #5e6b7e,
+    #475569
+  );
 }
 .battery-gradient {
-  background-image: linear-gradient(to bottom, #65a30d, #75b122, #86c033, #96cf42, #a7de51, #a7de51, #a7de51, #a7de51, #96cf42, #86c033, #75b122, #65a30d);
+  background-image: linear-gradient(
+    to bottom,
+    #65a30d,
+    #75b122,
+    #86c033,
+    #96cf42,
+    #a7de51,
+    #a7de51,
+    #a7de51,
+    #a7de51,
+    #96cf42,
+    #86c033,
+    #75b122,
+    #65a30d
+  );
 }

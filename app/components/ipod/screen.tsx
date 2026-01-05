@@ -11,7 +11,11 @@ export interface ScreenProps {
   onHover?: (index: number) => void;
 }
 
-export default function Screen({selectedIndex, currentScreen, onHover}: ScreenProps) {
+export default function Screen({
+  selectedIndex,
+  currentScreen,
+  onHover,
+}: ScreenProps) {
   // const toRender = switch(currentScreen){
   //     case "menu":
   //         return (
@@ -29,11 +33,11 @@ export default function Screen({selectedIndex, currentScreen, onHover}: ScreenPr
 
   // put below in request animation frame to wait until render to run
   // should know mouse location w/o getting rect
-    // every mouse move tracks delta from last move
-    // store in ref to avoid rerender (as state)
-    // use value without rerendering
+  // every mouse move tracks delta from last move
+  // store in ref to avoid rerender (as state)
+  // use value without rerendering
   // use css transitions to smooth between 1 step and another
-    // that way, only run every x milliseconds
+  // that way, only run every x milliseconds
 
   //1. define function outside of render cycle
   //2. useCallback to memoize
@@ -54,28 +58,32 @@ export default function Screen({selectedIndex, currentScreen, onHover}: ScreenPr
     setMousePosition({ x, y });
   };
 
-  
   // check if there is an active timer
-    // if so, return
-    // else, create a new timeout to set value
-    // function that sets value should also clear timeout
-    // ms value set is min amt of time that has to pass before updated again in refresh cycle
+  // if so, return
+  // else, create a new timeout to set value
+  // function that sets value should also clear timeout
+  // ms value set is min amt of time that has to pass before updated again in refresh cycle
 
   return (
-    <div 
-        ref={screenRef}
-        onMouseMove={handleMouseMove}
-        className="screen-class justify-center bg-screen border-2 border-screen-border w-64 h-48 shadow-[inset_0_-1px_2px_rgba(0,0,0,0.4)]"
-    >   
-        <ScreenHeader />
-        <MenuView selectedIndex={selectedIndex} currentScreen={currentScreen} onHover={onHover}/>
-        <div
-          className="screen-overlay"
-          style={{
-            "transform": `translate3d(${mousePosition.x}px, ${mousePosition.y}px, 0px)`
-          } as React.CSSProperties}
-        >
-        </div>
+    <div
+      ref={screenRef}
+      onMouseMove={handleMouseMove}
+      className="screen-class justify-center bg-screen border-2 border-screen-border w-64 h-48 shadow-[inset_0_-1px_2px_rgba(0,0,0,0.4)]"
+    >
+      <ScreenHeader />
+      <MenuView
+        selectedIndex={selectedIndex}
+        currentScreen={currentScreen}
+        onHover={onHover}
+      />
+      <div
+        className="screen-overlay"
+        style={
+          {
+            transform: `translate3d(${mousePosition.x}px, ${mousePosition.y}px, 0px)`,
+          } as React.CSSProperties
+        }
+      ></div>
     </div>
-  )
+  );
 }

@@ -11,16 +11,15 @@ export default function Body() {
   const [isPlaying, setIsPlaying] = useState(false);
   // const [currentSong, setCurrentSong] = useState
 
-
   //   const {user, playlists} = useSpotify();
 
   const handleSelect = () => {
     // navigation
-    if (selectedIndex === -1 ) return;
+    if (selectedIndex === -1) return;
     const currentItem = menuItems[currentScreen][selectedIndex];
     switch (currentItem.type) {
       case "submenu":
-        setMenuStack(prev => [...prev, currentItem.route]);
+        setMenuStack((prev) => [...prev, currentItem.route]);
         setCurrentScreen(currentItem.route);
         setSelectedIndex(-1);
         break;
@@ -29,7 +28,7 @@ export default function Body() {
         break;
       case "song":
         // play song from spotify player
-      break;
+        break;
     }
   };
 
@@ -57,7 +56,6 @@ export default function Body() {
     }
   };
 
-
   const handlePlayPause = () => {
     isPlaying ? setIsPlaying(false) : setIsPlaying(true);
     // when spotify api is added, call play or pause on player
@@ -78,7 +76,6 @@ export default function Body() {
     }
   };
 
-
   const handleSideChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentSide(e.target.value as SideEnum);
   };
@@ -90,9 +87,9 @@ export default function Body() {
           <div className="flex flex-col w-full">
             {/* <Screen /> */}
             <div className="absolute left-1/2 -translate-x-1/2 mt-[24.5px]">
-              <Screen 
-                selectedIndex={selectedIndex} 
-                currentScreen={currentScreen} 
+              <Screen
+                selectedIndex={selectedIndex}
+                currentScreen={currentScreen}
                 onHover={setSelectedIndex}
               />
             </div>

@@ -2,13 +2,13 @@ import type { Route } from "./+types/home";
 import Body from "~/components/ipod/body";
 
 export function meta({}: Route.MetaArgs) {
-  return [
-    { title: "iPod Nano" },
-  ];
+  return [{ title: "iPod Nano" }];
 }
 
 export default function Home() {
-  return <div className="flex items-center p-4 justify-center ">
-  <Body />
-  </div>;
+  return (
+    <div className="flex items-center p-4 justify-center ">
+      <Body />
+    </div>
+  );
 }
