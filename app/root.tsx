@@ -32,7 +32,13 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  return { session };
+  return {
+    session,
+    env: {
+      SUPABASE_URL: process.env.SUPABASE_URL!,
+      SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY!,
+    },
+  };
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {
@@ -54,9 +60,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const { session } = useLoaderData<typeof loader>();
+  const { session, env } = useLoaderData<typeof loader>();
   return (
-    <AuthProvider initialSession={session}>
+    <AuthProvider initialSession={session} env={env}>
       <Outlet />
     </AuthProvider>
   );
