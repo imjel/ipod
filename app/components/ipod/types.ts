@@ -24,7 +24,7 @@ export const getMenuItems = (
     { type: "submenu", label: "About", route: "About" },
     {
       type: "action",
-      label: "Login/Logout",
+      label: "Logout",
       action: () => {
         signOut();
       },
