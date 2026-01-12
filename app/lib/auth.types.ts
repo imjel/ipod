@@ -4,6 +4,7 @@ export interface AuthState {
   user: User | null;
   session: Session | null;
   isLoading: boolean;
+  isClientReady: boolean;
   spotifyToken: string | null;
 }
 

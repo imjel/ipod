@@ -1,6 +1,8 @@
 export type SideEnum = "front" | "back" | "right" | "left" | "top" | "bottom";
 
-export const menuItems: Record<string, MenuItem[]> = {
+export const getMenuItems = (
+  signOut: () => Promise<void>,
+): Record<string, MenuItem[]> => ({
   home: [
     { type: "submenu", label: "Music", route: "Music" },
     { type: "submenu", label: "Settings", route: "Settings" },
@@ -24,12 +26,12 @@ export const menuItems: Record<string, MenuItem[]> = {
       type: "action",
       label: "Login/Logout",
       action: () => {
-        /* auth */
+        signOut();
       },
     },
     { type: "submenu", label: "Change Color", route: "Colors" },
   ],
-};
+});
 
 export type MenuItem =
   | { type: "submenu"; label: string; route: string }
