@@ -4,17 +4,22 @@
 import { useRef, useState } from "react";
 import ScreenHeader from "./screens/ScreenHeader";
 import MenuView from "./screens/MenuView";
+import { useAuth } from "~/context/AuthContext";
+import LoginView from "./screens/LoginView";
+import type { MenuItem } from "./types";
 
 export interface ScreenProps {
   selectedIndex: number;
   currentScreen: string;
   onHover?: (index: number) => void;
+  menuItems: Record<string, MenuItem[]>;
 }
 
 export default function Screen({
   selectedIndex,
   currentScreen,
   onHover,
+  menuItems,
 }: ScreenProps) {
   // const toRender = switch(currentScreen){
   //     case "menu":
@@ -27,6 +32,7 @@ export default function Screen({
   //             <MenuView />
   //         )
   // }
+  const { user, isLoading, signInWithSpotify } = useAuth();
   const screenRef = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const timer = useRef<boolean | null>(null);
@@ -70,12 +76,19 @@ export default function Screen({
       onMouseMove={handleMouseMove}
       className="screen-class justify-center bg-screen border-2 border-screen-border w-64 h-48 shadow-[inset_0_-1px_2px_rgba(0,0,0,0.4)]"
     >
-      <ScreenHeader />
-      <MenuView
-        selectedIndex={selectedIndex}
-        currentScreen={currentScreen}
-        onHover={onHover}
-      />
+      {!user ? (
+        <LoginView onSignIn={signInWithSpotify} isLoading={isLoading} />
+      ) : (
+        <>
+          <ScreenHeader />
+          <MenuView
+            selectedIndex={selectedIndex}
+            currentScreen={currentScreen}
+            onHover={onHover}
+            menuItems={menuItems}
+          />
+        </>
+      )}
       <div
         className="screen-overlay"
         style={

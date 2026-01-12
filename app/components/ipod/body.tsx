@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import Wheel from "./wheel";
 import Screen from "./screen";
-import { type SideEnum, menuItems } from "./types";
+import { type SideEnum, getMenuItems } from "./types";
+import { useSpotify } from "~/hooks/useSpotify";
+import { useAuth } from "~/context/AuthContext";
 
 export default function Body() {
   const [currentScreen, setCurrentScreen] = useState("home");
@@ -10,8 +12,10 @@ export default function Body() {
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(false);
   // const [currentSong, setCurrentSong] = useState
+  const { client, isReady } = useSpotify();
+  const { signOut } = useAuth();
 
-  //   const {user, playlists} = useSpotify();
+  const menuItems = useMemo(() => getMenuItems(signOut), [signOut]);
 
   const handleSelect = () => {
     // navigation
@@ -57,22 +61,27 @@ export default function Body() {
   };
 
   const handlePlayPause = () => {
-    isPlaying ? setIsPlaying(false) : setIsPlaying(true);
-    // when spotify api is added, call play or pause on player
+    if (isPlaying) {
+      setIsPlaying(false);
+      client.pause();
+    } else {
+      setIsPlaying(true);
+      client.play();
+    }
     // update ui
   };
 
   const handleNext = () => {
     if (isPlaying) {
       // skip to next track and set currentSong
-      // setCurrentSong(newSong)
+      client.next();
     }
   };
 
   const handlePrev = () => {
     if (isPlaying) {
       // go back to previous track or restart current song if >3s in
-      // setCurrentSong(prevSong)
+      client.previous();
     }
   };
 
@@ -91,6 +100,7 @@ export default function Body() {
                 selectedIndex={selectedIndex}
                 currentScreen={currentScreen}
                 onHover={setSelectedIndex}
+                menuItems={menuItems}
               />
             </div>
             {/* control wheel */}

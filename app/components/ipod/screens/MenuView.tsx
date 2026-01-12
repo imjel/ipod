@@ -1,4 +1,3 @@
-import { menuItems } from "../types";
 import { MdChevronRight } from "react-icons/md";
 import type { ScreenProps } from "../screen";
 
@@ -6,6 +5,7 @@ export default function MenuView({
   selectedIndex,
   currentScreen,
   onHover,
+  menuItems,
 }: ScreenProps) {
   const items = menuItems[currentScreen] || [];
   return (
