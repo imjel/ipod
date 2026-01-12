@@ -4,9 +4,10 @@ import {
   useEffect,
   useState,
   useCallback,
+  useMemo,
 } from "react";
-import type { Session, User } from "@supabase/supabase-js";
-import { getSupabaseBrowserClient } from "~/lib/supabase.client";
+import { createBrowserClient } from "@supabase/ssr";
+import type { Session, SupabaseClient } from "@supabase/supabase-js";
 import type { AuthContextValue, AuthState } from "~/lib/auth.types";
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -14,14 +15,28 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 interface AuthProviderProps {
   children: React.ReactNode;
   initialSession: Session | null;
+  env: {
+    SUPABASE_URL: string;
+    SUPABASE_ANON_KEY: string;
+  };
 }
 
-export function AuthProvider({ children, initialSession }: AuthProviderProps) {
-  const [supabase] = useState(() => getSupabaseBrowserClient());
+export function AuthProvider({
+  children,
+  initialSession,
+  env,
+}: AuthProviderProps) {
+  // Create supabase client with env vars from server
+  const supabase = useMemo<SupabaseClient>(
+    () => createBrowserClient(env.SUPABASE_URL, env.SUPABASE_ANON_KEY),
+    [env.SUPABASE_URL, env.SUPABASE_ANON_KEY],
+  );
+
   const [state, setState] = useState<AuthState>({
     user: initialSession?.user ?? null,
     session: initialSession,
-    isLoading: true,
+    isLoading: false,
+    isClientReady: true, // Client is ready immediately now
     spotifyToken: initialSession?.provider_token ?? null,
   });
 
@@ -34,19 +49,9 @@ export function AuthProvider({ children, initialSession }: AuthProviderProps) {
         user: session?.user ?? null,
         session,
         spotifyToken: session?.provider_token ?? null,
-        isLoading: false,
       }));
     });
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setState((prev) => ({
-        ...prev,
-        user: session?.user ?? null,
-        session,
-        spotifyToken: session?.provider_token ?? null,
-        isLoading: false,
-      }));
-    });
     return () => subscription.unsubscribe();
   }, [supabase]);
 
