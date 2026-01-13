@@ -50,27 +50,6 @@ export class SpotifyClient {
     return this.fetch(`/playlists/${id}/tracks`);
   }
 
-  // player options
-  async play() {
-    return this.fetch("/me/player/play", { method: "PUT" });
-  }
-
-  async pause() {
-    return this.fetch("/me/player/pause", { method: "PUT" });
-  }
-
-  async next() {
-    return this.fetch("/me/player/next", { method: "POST" });
-  }
-
-  async previous() {
-    return this.fetch("/me/player/previous", { method: "POST" });
-  }
-
-  async getCurrentPlayback() {
-    return this.fetch("/me/player");
-  }
-
   async getTopArtists() {
     return this.fetch("/me/top/artists?time_range=medium_term");
   }
