@@ -1,19 +1,19 @@
-import { useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef } from "react";
 import Wheel from "./wheel";
 import Screen from "./screen";
 import { type SideEnum, getMenuItems } from "./types";
-import { useSpotify } from "~/hooks/useSpotify";
 import { useAuth } from "~/context/AuthContext";
 import { usePlayback } from "~/context/PlaybackContext";
+import type { SpotifyTrack } from "~/lib/spotify.types";
 
 export default function Body() {
   const [currentScreen, setCurrentScreen] = useState("home");
   const [menuStack, setMenuStack] = useState(["home"]); // layers of routes
   const [currentSide, setCurrentSide] = useState<SideEnum>("front");
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  // const [currentSong, setCurrentSong] = useState
   const { signOut } = useAuth();
-  const { togglePlayPause, next, prev } = usePlayback();
+  const { currentTrack, togglePlayPause, next, prev } = usePlayback();
+  const prevTrackRef = useRef<SpotifyTrack | null>(null);
 
   const menuItems = useMemo(() => getMenuItems(signOut), [signOut]);
 
@@ -75,6 +75,15 @@ export default function Body() {
   const handleSideChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCurrentSide(e.target.value as SideEnum);
   };
+
+  useEffect(() => {
+    if (!prevTrackRef.current && currentTrack) {
+      setMenuStack((prev) => [...prev, "NowPlaying"]);
+      setCurrentScreen("NowPlaying");
+      setSelectedIndex(-1);
+    }
+    prevTrackRef.current = currentTrack;
+  }, [currentTrack]);
 
   return (
     <div className="ipod-scene flex flex-col items-center gap-2 pt-10">
