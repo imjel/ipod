@@ -11,6 +11,7 @@ import {
 import type { Route } from "./+types/root";
 import "./app.css";
 import { AuthProvider } from "./context/AuthContext";
+import { PlaybackProvider } from "./context/PlaybackContext";
 import { createSupabaseServerClient } from "./lib/supabase.server";
 
 export const links: Route.LinksFunction = () => [
@@ -63,7 +64,9 @@ export default function App() {
   const { session, env } = useLoaderData<typeof loader>();
   return (
     <AuthProvider initialSession={session} env={env}>
-      <Outlet />
+      <PlaybackProvider>
+        <Outlet />
+      </PlaybackProvider>
     </AuthProvider>
   );
 }
