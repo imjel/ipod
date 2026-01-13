@@ -4,16 +4,16 @@ import Screen from "./screen";
 import { type SideEnum, getMenuItems } from "./types";
 import { useSpotify } from "~/hooks/useSpotify";
 import { useAuth } from "~/context/AuthContext";
+import { usePlayback } from "~/context/PlaybackContext";
 
 export default function Body() {
   const [currentScreen, setCurrentScreen] = useState("home");
   const [menuStack, setMenuStack] = useState(["home"]); // layers of routes
   const [currentSide, setCurrentSide] = useState<SideEnum>("front");
   const [selectedIndex, setSelectedIndex] = useState(-1);
-  const [isPlaying, setIsPlaying] = useState(false);
   // const [currentSong, setCurrentSong] = useState
-  const { client, isReady } = useSpotify();
   const { signOut } = useAuth();
+  const { togglePlayPause, next, prev } = usePlayback();
 
   const menuItems = useMemo(() => getMenuItems(signOut), [signOut]);
 
@@ -61,28 +61,15 @@ export default function Body() {
   };
 
   const handlePlayPause = () => {
-    if (isPlaying) {
-      setIsPlaying(false);
-      client.pause();
-    } else {
-      setIsPlaying(true);
-      client.play();
-    }
-    // update ui
+    togglePlayPause();
   };
 
   const handleNext = () => {
-    if (isPlaying) {
-      // skip to next track and set currentSong
-      client.next();
-    }
+    next();
   };
 
   const handlePrev = () => {
-    if (isPlaying) {
-      // go back to previous track or restart current song if >3s in
-      client.previous();
-    }
+    prev();
   };
 
   const handleSideChange = (e: React.ChangeEvent<HTMLInputElement>) => {
