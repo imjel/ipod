@@ -7,6 +7,7 @@ import MenuView from "./screens/MenuView";
 import { useAuth } from "~/context/AuthContext";
 import LoginView from "./screens/LoginView";
 import type { MenuItem } from "./types";
+import NowPlayingView from "./screens/NowPlayingView";
 
 export interface ScreenProps {
   selectedIndex: number;
@@ -70,6 +71,21 @@ export default function Screen({
   // function that sets value should also clear timeout
   // ms value set is min amt of time that has to pass before updated again in refresh cycle
 
+  const renderScreen = () => {
+    if (currentScreen === "NowPlaying") {
+      return <NowPlayingView />;
+    } else {
+      return (
+        <MenuView
+          selectedIndex={selectedIndex}
+          currentScreen={currentScreen}
+          onHover={onHover}
+          menuItems={menuItems}
+        />
+      );
+    }
+  };
+
   return (
     <div
       ref={screenRef}
@@ -81,12 +97,7 @@ export default function Screen({
       ) : (
         <>
           <ScreenHeader />
-          <MenuView
-            selectedIndex={selectedIndex}
-            currentScreen={currentScreen}
-            onHover={onHover}
-            menuItems={menuItems}
-          />
+          {renderScreen()}
         </>
       )}
       <div
