@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, useRef } from "react";
+import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import Wheel from "./wheel";
 import Screen from "./screen";
 import { type SideEnum, getMenuItems } from "./types";
@@ -17,7 +17,7 @@ export default function Body() {
 
   const menuItems = useMemo(() => getMenuItems(signOut), [signOut]);
 
-  const handleSelect = () => {
+  const handleSelect = useCallback(() => {
     // navigation
     if (selectedIndex === -1) return;
     const currentItem = menuItems[currentScreen][selectedIndex];
@@ -34,7 +34,7 @@ export default function Body() {
         // play song from spotify player
         break;
     }
-  };
+  }, [selectedIndex, currentScreen, menuItems]);
 
   const handleMenu = () => {
     // send user back to the previous menu
@@ -48,17 +48,20 @@ export default function Body() {
   };
 
   // delta from wheel onScroll useCallback
-  const handleScroll = (delta: number) => {
-    const items = menuItems[currentScreen] || [];
-    if (selectedIndex === -1) {
-      //first scroll, so select the first item
-      setSelectedIndex(0);
-    } else {
-      const newIndex = selectedIndex + delta;
-      const clampedIndex = Math.max(0, Math.min(newIndex, items.length - 1));
-      setSelectedIndex(clampedIndex);
-    }
-  };
+  const handleScroll = useCallback(
+    (delta: number) => {
+      const items = menuItems[currentScreen] || [];
+      if (selectedIndex === -1) {
+        //first scroll, so select the first item
+        setSelectedIndex(0);
+      } else {
+        const newIndex = selectedIndex + delta;
+        const clampedIndex = Math.max(0, Math.min(newIndex, items.length - 1));
+        setSelectedIndex(clampedIndex);
+      }
+    },
+    [menuItems, currentScreen, selectedIndex],
+  );
 
   const handlePlayPause = () => {
     togglePlayPause();
@@ -84,6 +87,24 @@ export default function Body() {
     }
     prevTrackRef.current = currentTrack;
   }, [currentTrack]);
+
+  // key board events for enter & arrow keys (navigation)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleSelect();
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        handleScroll(-1);
+      } else if (e.key === "ArrowDown") {
+        e.preventDefault();
+        handleScroll(1);
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [handleSelect, handleScroll]);
 
   return (
     <div className="ipod-scene flex flex-col items-center gap-2 pt-10">
