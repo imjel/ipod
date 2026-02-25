@@ -56,9 +56,6 @@ export default function Wheel({
   };
 
   const handleWheelMove = (clientX: number, clientY: number) => {
-    if (!scrolling) console.log("not scrolling");
-    if (!onScroll) console.log("no onScroll");
-
     if (!scrolling || !onScroll) return;
 
     const currentAngle = getAngle(clientX, clientY);
@@ -70,7 +67,6 @@ export default function Wheel({
 
     // scroll event if movement is notable/should cause scroll (over 10deg)
     if (Math.abs(delta) > 10) {
-      console.log("debug: scroll!", delta > 0 ? 1 : -1);
       onScroll(delta > 0 ? 1 : -1); // scroll +1 for clockwise, -1 counter-clockwise
       lastAngleRef.current = currentAngle;
     }
@@ -108,7 +104,6 @@ export default function Wheel({
   // mouse events
   const handleMouseDown = (e: MouseEvent<HTMLDivElement>) => {
     e.preventDefault();
-    console.log("debug: mouse down", e.target);
     handleWheelStart(e.clientX, e.clientY);
   };
 
