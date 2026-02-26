@@ -5,17 +5,28 @@ import { type SideEnum, getMenuItems } from "./types";
 import { useAuth } from "~/context/AuthContext";
 import { usePlayback } from "~/context/PlaybackContext";
 import type { SpotifyTrack } from "~/lib/spotify.types";
+import { useSpotify } from "~/hooks/useSpotify";
 
 export default function Body() {
   const [currentScreen, setCurrentScreen] = useState("home");
   const [menuStack, setMenuStack] = useState(["home"]); // layers of routes
   const [currentSide, setCurrentSide] = useState<SideEnum>("front");
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const { client, isReady } = useSpotify();
   const { signOut } = useAuth();
-  const { currentTrack, togglePlayPause, next, prev } = usePlayback();
+  const { currentTrack, togglePlayPause, next, prev, deviceId } = usePlayback();
   const prevTrackRef = useRef<SpotifyTrack | null>(null);
 
-  const menuItems = useMemo(() => getMenuItems(signOut), [signOut]);
+  const shuffle = async () => {
+    if (!isReady || !deviceId) return;
+    await client.shuffle(true, deviceId);
+    await client.play(deviceId);
+  };
+
+  const menuItems = useMemo(
+    () => getMenuItems(signOut, shuffle),
+    [signOut, shuffle],
+  );
 
   const handleSelect = useCallback(() => {
     // navigation
