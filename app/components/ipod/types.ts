@@ -20,6 +20,7 @@ export const getMenuItems = (
     { type: "submenu", label: "Artists", route: "Artists" },
     { type: "submenu", label: "Albums", route: "Albums" },
     { type: "submenu", label: "Songs", route: "Songs" },
+    { type: "submenu", label: "Now Playing", route: "NowPlaying"},
   ],
   Settings: [
     { type: "submenu", label: "About", route: "About" },

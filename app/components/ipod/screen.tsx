@@ -22,17 +22,6 @@ export default function Screen({
   onHover,
   menuItems,
 }: ScreenProps) {
-  // const toRender = switch(currentScreen){
-  //     case "menu":
-  //         return (
-  //             <MenuView />
-  //         )
-  //         // render menuview
-  //     default:
-  //         return (
-  //             <MenuView />
-  //         )
-  // }
   const { user, isLoading, signInWithSpotify } = useAuth();
   const screenRef = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -90,7 +79,7 @@ export default function Screen({
     <div
       ref={screenRef}
       onMouseMove={handleMouseMove}
-      className="screen-class justify-center bg-screen border-2 border-screen-border w-64 h-48 shadow-[inset_0_-1px_2px_rgba(0,0,0,0.4)]"
+      className="screen-class flex flex-col bg-screen border-2 border-screen-border w-64 h-48 shadow-[inset_0_-1px_2px_rgba(0,0,0,0.4)]"
     >
       {!user ? (
         <LoginView onSignIn={signInWithSpotify} isLoading={isLoading} />
