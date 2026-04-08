@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 export interface UsePlaybackProgressArgs {
   positionMs: number;
@@ -15,7 +15,7 @@ export function usePlaybackProgress({
 }: UsePlaybackProgressArgs) {
   // ref for last playback position received from spotify sdk
   const spotifyPositionRef = useRef({ position: positionMs, at: Date.now() });
-  const [, setFrame] = useState(0);
+  const barRef = useRef<HTMLDivElement>(null)
 
   // anytime we receive new position, duration, user plays or pauses, or new track switches,
   // official ref updates
@@ -23,31 +23,27 @@ export function usePlaybackProgress({
     spotifyPositionRef.current = { position: positionMs, at: Date.now() };
   }, [positionMs, durationMs, isPlaying, trackUri]);
 
-  // if isPlaying, use requestAnimationFrame to move bar
+  // if isPlaying, use requestAnimationFrame to update div element width
   useEffect(() => {
     if (!isPlaying) return;
 
-    let pos = 0;
+    let pos: number;
     function tick() {
-      setFrame((n) => n + 1); // react only rerenders a ref when state changes
-      pos = requestAnimationFrame(tick);
+      const elapsed = spotifyPositionRef.current.position + (Date.now() - spotifyPositionRef.current.at);
+      const percentElapsed = Math.min((elapsed/durationMs *100), 100);
+      barRef.current!.style.width = `${percentElapsed}%`;
+      if (percentElapsed < 100) pos = requestAnimationFrame(tick);
     }
 
     pos = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(pos);
-  }, [isPlaying]);
+  }, [isPlaying, durationMs]);
 
-  if (durationMs <= 0) return 0;
+  // if paused, set bar width directly from spotify position
+  useEffect(() => {
+    if (isPlaying || !barRef.current || durationMs <= 0) return;
+    barRef.current.style.width = `${(positionMs / durationMs) * 100}%`;
+  }, [isPlaying, positionMs, durationMs]);
 
-  // if player is playing, pos is elapsed time since last position ref snapshot
-  // + we clamp so it doesn't exceed duration of song
-  const liveMs = isPlaying
-    ? Math.min(
-        spotifyPositionRef.current.position +
-          (Date.now() - spotifyPositionRef.current.at),
-        durationMs,
-      )
-    : // if paused, it's just the position that spotify api returns
-      positionMs;
-  return (liveMs / durationMs) * 100;
+  return barRef;
 }

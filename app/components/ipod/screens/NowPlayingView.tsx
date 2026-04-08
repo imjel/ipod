@@ -35,7 +35,7 @@ export default function NowPlayingView() {
         </ul>
       </section>
 
-      <ProgressBar progress={progress} />
+      <ProgressBar ref={progress} />
     </div>
   );
 }
