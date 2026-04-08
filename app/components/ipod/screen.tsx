@@ -7,6 +7,7 @@ import MenuView from "./screens/MenuView";
 import { useAuth } from "~/context/AuthContext";
 import LoginView from "./screens/LoginView";
 import type { MenuItem } from "./types";
+import NowPlayingView from "./screens/NowPlayingView";
 
 export interface ScreenProps {
   selectedIndex: number;
@@ -21,17 +22,6 @@ export default function Screen({
   onHover,
   menuItems,
 }: ScreenProps) {
-  // const toRender = switch(currentScreen){
-  //     case "menu":
-  //         return (
-  //             <MenuView />
-  //         )
-  //         // render menuview
-  //     default:
-  //         return (
-  //             <MenuView />
-  //         )
-  // }
   const { user, isLoading, signInWithSpotify } = useAuth();
   const screenRef = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -70,23 +60,33 @@ export default function Screen({
   // function that sets value should also clear timeout
   // ms value set is min amt of time that has to pass before updated again in refresh cycle
 
+  const renderScreen = () => {
+    if (currentScreen === "NowPlaying") {
+      return <NowPlayingView />;
+    } else {
+      return (
+        <MenuView
+          selectedIndex={selectedIndex}
+          currentScreen={currentScreen}
+          onHover={onHover}
+          menuItems={menuItems}
+        />
+      );
+    }
+  };
+
   return (
     <div
       ref={screenRef}
       onMouseMove={handleMouseMove}
-      className="screen-class justify-center bg-screen border-2 border-screen-border w-64 h-48 shadow-[inset_0_-1px_2px_rgba(0,0,0,0.4)]"
+      className="screen-class flex flex-col bg-screen border-2 border-screen-border w-64 h-48 shadow-[inset_0_-1px_2px_rgba(0,0,0,0.4)]"
     >
       {!user ? (
         <LoginView onSignIn={signInWithSpotify} isLoading={isLoading} />
       ) : (
         <>
           <ScreenHeader />
-          <MenuView
-            selectedIndex={selectedIndex}
-            currentScreen={currentScreen}
-            onHover={onHover}
-            menuItems={menuItems}
-          />
+          {renderScreen()}
         </>
       )}
       <div

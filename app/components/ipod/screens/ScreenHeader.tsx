@@ -1,4 +1,4 @@
-import Battery from "./Battery";
+import Battery from "../icons/Battery";
 
 export default function ScreenHeader() {
   return (

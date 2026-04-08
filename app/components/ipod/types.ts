@@ -2,6 +2,7 @@ export type SideEnum = "front" | "back" | "right" | "left" | "top" | "bottom";
 
 export const getMenuItems = (
   signOut: () => Promise<void>,
+  shuffle: () => Promise<void>,
 ): Record<string, MenuItem[]> => ({
   home: [
     { type: "submenu", label: "Music", route: "Music" },
@@ -10,7 +11,7 @@ export const getMenuItems = (
       type: "action",
       label: "Shuffle Songs",
       action: () => {
-        /* shuffle */
+        shuffle();
       },
     },
   ],
@@ -19,6 +20,7 @@ export const getMenuItems = (
     { type: "submenu", label: "Artists", route: "Artists" },
     { type: "submenu", label: "Albums", route: "Albums" },
     { type: "submenu", label: "Songs", route: "Songs" },
+    { type: "submenu", label: "Now Playing", route: "NowPlaying"},
   ],
   Settings: [
     { type: "submenu", label: "About", route: "About" },

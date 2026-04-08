@@ -326,3 +326,34 @@ body {
 .animate-fade-in {
   animation: fade-in 1s ease-in;
 }
+
+
+/* ---- PROGRESS BAR ---- */
+.progress-bar-inner-gradient {
+  background-image: linear-gradient(
+    to bottom,
+    #5b9fdd,
+    #69b7ff,
+    #e7f7fb,
+    #69b7ff,
+    #5b9fdd,
+    #69b7ff
+  );
+}
+
+.progress-bar-outer-gradient {
+  background-image: linear-gradient(
+    to top,
+    #bac6d7,
+    #c0ccdc,
+    #e7f7fb,
+    #dde6f1,
+    #d3deec,
+    #a8b3c2
+  );
+}
+
+.progress-bar-border {
+  border-top: 1px solid #768294;
+  border-bottom: 1px solid #a8b3c2;
+}

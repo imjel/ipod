@@ -53,4 +53,17 @@ export class SpotifyClient {
   async getTopArtists() {
     return this.fetch("/me/top/artists?time_range=medium_term");
   }
+
+  async shuffle(state = true, deviceId: string) {
+    return this.fetch(
+      `/me/player/shuffle?state=${state}&device_id=${deviceId}`,
+      { method: "PUT" },
+    );
+  }
+
+  async play(deviceId: string) {
+    return this.fetch(`/me/player/play&device_id=${deviceId}`, {
+      method: "PUT",
+    });
+  }
 }
