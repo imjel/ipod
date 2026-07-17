@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { formatTime } from "~/lib/formatTime";
 
 export interface UsePlaybackProgressArgs {
   positionMs: number;
@@ -6,6 +7,12 @@ export interface UsePlaybackProgressArgs {
   isPlaying: boolean;
   trackUri: string | null;
 }
+
+export type UsePlaybackProgressReturn = {
+  ref: React.RefObject<HTMLDivElement | null>;
+  timeElapsedRef: React.RefObject<HTMLSpanElement | null>;
+  timeRemainingRef: React.RefObject<HTMLSpanElement | null>;
+};
 
 export function usePlaybackProgress({
   positionMs,
@@ -15,7 +22,9 @@ export function usePlaybackProgress({
 }: UsePlaybackProgressArgs) {
   // ref for last playback position received from spotify sdk
   const spotifyPositionRef = useRef({ position: positionMs, at: Date.now() });
-  const barRef = useRef<HTMLDivElement>(null)
+  const barRef = useRef<HTMLDivElement>(null);
+  const timeElapsedRef = useRef<HTMLSpanElement>(null);
+  const timeRemainingRef = useRef<HTMLSpanElement>(null);
 
   // anytime we receive new position, duration, user plays or pauses, or new track switches,
   // official ref updates
@@ -29,8 +38,17 @@ export function usePlaybackProgress({
 
     let pos: number;
     function tick() {
-      const elapsed = spotifyPositionRef.current.position + (Date.now() - spotifyPositionRef.current.at);
-      const percentElapsed = Math.min((elapsed/durationMs *100), 100);
+      const elapsed =
+        spotifyPositionRef.current.position +
+        (Date.now() - spotifyPositionRef.current.at);
+      const elapsedSec = Math.floor(Math.min(elapsed, durationMs) / 1000);
+      const durationSec = Math.round(durationMs / 1000); // to avoid rounding lag in labels
+      const remainingSec = Math.max(durationSec - elapsedSec, 0);
+
+      timeElapsedRef.current!.textContent = formatTime(elapsedSec);
+      timeRemainingRef.current!.textContent = formatTime(remainingSec);
+
+      const percentElapsed = Math.min((elapsed / durationMs) * 100, 100);
       barRef.current!.style.width = `${percentElapsed}%`;
       if (percentElapsed < 100) pos = requestAnimationFrame(tick);
     }
@@ -45,5 +63,9 @@ export function usePlaybackProgress({
     barRef.current.style.width = `${(positionMs / durationMs) * 100}%`;
   }, [isPlaying, positionMs, durationMs]);
 
-  return barRef;
+  return {
+    barRef,
+    timeElapsedRef,
+    timeRemainingRef,
+  };
 }
