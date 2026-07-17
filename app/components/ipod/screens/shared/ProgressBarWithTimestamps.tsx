@@ -7,11 +7,11 @@ export function ProgressBarWithTimestamps({
   timeRemainingRef,
 }: UsePlaybackProgressReturn) {
   return (
-    <div className="flex flex-col gap-0.5">
+    <div className="flex flex-col gap-0.5 w-full">
       <ProgressBar ref={ref} />
       <section className="flex flex-row justify-between">
-        <span ref={timeElapsedRef}></span>
-        <span ref={timeRemainingRef}></span>
+        <span ref={timeElapsedRef}>0:00</span>
+        <span ref={timeRemainingRef}>0:00</span>
       </section>
     </div>
   );
