@@ -21,7 +21,10 @@
   --font-helvetica-italic: "Helvetica-It", sans-serif;
 
   /* shading */
-  --color-ipod-blue-light: #4fc3e8;
+  --color-ipod-base: #02abd6;
+  --color-ipod-light: oklch(from var(--color-ipod-base) calc(l * 1.1) c h);
+
+  --color-ipod-light: oklch(from var(--color-ipod-base) calc(l * 1.1) c h);
   --color-ipod-blue-dark: #016a86;
   --color-ipod-blue-shadow: #014b5f;
 
@@ -162,23 +165,23 @@ body {
   background:
     radial-gradient(
       ellipse 50% 20% at 50% 70%,
-      var(--color-ipod-blue-light),
+      var(--color-ipod-light),
       transparent 60%
     ),
     linear-gradient(
       90deg,
-      var(--color-ipod-blue-light) 0%,
+      var(--color-ipod-light) 0%,
       transparent 1%,
       transparent 95%,
-      var(--color-ipod-blue-light) 98%,
+      var(--color-ipod-light) 98%,
       var(--color-ipod-blue-dark) 100%
     ),
     linear-gradient(
       270deg,
-      var(--color-ipod-blue-light) 0%,
+      var(--color-ipod-light) 0%,
       transparent 5%,
       transparent 93%,
-      var(--color-ipod-blue-light) 95%,
+      var(--color-ipod-light) 95%,
       var(--color-ipod-blue-dark) 100%
     ),
     var(--color-ipod-blue);
@@ -210,18 +213,18 @@ body {
     ),
     linear-gradient(
       90deg,
-      var(--color-ipod-blue-light) 0%,
+      var(--color-ipod-light) 0%,
       transparent 5%,
       transparent 80%,
-      var(--color-ipod-blue-light) 90%,
+      var(--color-ipod-light) 90%,
       var(--color-ipod-blue-dark) 100%
     ),
     linear-gradient(
       270deg,
-      var(--color-ipod-blue-light) 0%,
+      var(--color-ipod-light) 0%,
       transparent 5%,
       transparent 75%,
-      var(--color-ipod-blue-light) 90%,
+      var(--color-ipod-light) 90%,
       var(--color-ipod-blue-dark) 100%
     ),
     var(--color-ipod-blue);
