@@ -1,5 +1,4 @@
 import { usePlayback } from "~/context/PlaybackContext";
-import { ProgressBar } from "./shared/ProgressBar";
 import { usePlaybackProgress } from "~/hooks/usePlaybackProgress";
 import { ProgressBarWithTimestamps } from "./shared/ProgressBarWithTimestamps";
 
@@ -36,7 +35,6 @@ export default function NowPlayingView() {
         </ul>
       </section>
 
-      {/* <ProgressBar ref={progress.barRef} /> */}
       <ProgressBarWithTimestamps
         ref={progress.barRef}
         timeElapsedRef={progress.timeElapsedRef}

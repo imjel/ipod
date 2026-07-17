@@ -41,17 +41,12 @@ export function usePlaybackProgress({
       const elapsed =
         spotifyPositionRef.current.position +
         (Date.now() - spotifyPositionRef.current.at);
+      const elapsedSec = Math.floor(Math.min(elapsed, durationMs) / 1000);
+      const durationSec = Math.round(durationMs / 1000); // to avoid rounding lag in labels
+      const remainingSec = Math.max(durationSec - elapsedSec, 0);
 
-      if (timeElapsedRef.current) {
-        timeElapsedRef.current!.textContent = formatTime(
-          Math.min(elapsed, durationMs),
-        );
-      }
-      if (timeRemainingRef.current) {
-        timeRemainingRef.current!.textContent = formatTime(
-          Math.max(durationMs - elapsed, 0),
-        );
-      }
+      timeElapsedRef.current!.textContent = formatTime(elapsedSec);
+      timeRemainingRef.current!.textContent = formatTime(remainingSec);
 
       const percentElapsed = Math.min((elapsed / durationMs) * 100, 100);
       barRef.current!.style.width = `${percentElapsed}%`;
