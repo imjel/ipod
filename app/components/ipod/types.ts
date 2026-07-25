@@ -1,4 +1,5 @@
 export type SideEnum = "front" | "back" | "right" | "left" | "top" | "bottom";
+import { IPOD_COLORS, setColor } from "~/hooks/setColor";
 
 export const getMenuItems = (
   signOut: () => Promise<void>,
@@ -33,6 +34,11 @@ export const getMenuItems = (
     },
     { type: "submenu", label: "Change Color", route: "Colors" },
   ],
+  Colors: IPOD_COLORS.map((color) => ({
+    type: "action",
+    label: color.label,
+    action: () => setColor(color),
+  })),
 });
 
 export type MenuItem =

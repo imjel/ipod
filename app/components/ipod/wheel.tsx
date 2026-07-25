@@ -118,7 +118,7 @@ export default function Wheel({
   return (
     <div
       ref={wheelRef}
-      className="wheel relative flex items-center justify-center rounded-full bg-white border-2 border-ipod-blue-border w-62 h-62 shadow-sm select-none"
+      className="wheel relative flex items-center justify-center rounded-full bg-white border-2 border-ipod-border w-62 h-62 shadow-sm select-none"
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseUp}
@@ -153,10 +153,7 @@ export default function Wheel({
         </span>
       </button>
       {/* select button */}
-      <button
-        className="wheel-select-button rounded-full bg-ipod-blue w-28 h-28"
-        onClick={onSelect}
-      />
+      <button className="ipod-select-button" onClick={onSelect} />
     </div>
   );
 }
