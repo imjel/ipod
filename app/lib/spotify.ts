@@ -1,3 +1,5 @@
+import type { SpotifyPagingObject, SpotifyPlaylist } from "./spotify.types";
+
 /**
  * class that makes request to Spotify's API
  */
@@ -42,7 +44,7 @@ export class SpotifyClient {
   }
 
   // playlists
-  async getPlaylists() {
+  async getPlaylists(): Promise<SpotifyPagingObject<SpotifyPlaylist>> {
     return this.fetch("/me/playlists");
   }
 
@@ -62,7 +64,7 @@ export class SpotifyClient {
   }
 
   async play(deviceId: string) {
-    return this.fetch(`/me/player/play&device_id=${deviceId}`, {
+    return this.fetch(`/me/player/play?device_id=${deviceId}`, {
       method: "PUT",
     });
   }

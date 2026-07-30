@@ -1,3 +1,12 @@
+export interface SpotifyPagingObject<T> {
+  items: T[];
+  total: number;
+  limit: number;
+  offset: number;
+  next: string | null;
+  previous: string | null;
+}
+
 export interface SpotifyImage {
   url: string;
   height: string;
@@ -19,6 +28,17 @@ export interface SpotifyTrack {
     name: string;
     uri: string;
     images: SpotifyImage[];
+  };
+}
+
+export interface SpotifyPlaylist {
+  name: string;
+  description: string;
+  uri: string;
+  images: SpotifyImage[];
+  tracks: {
+    href: string;
+    total: number;
   };
 }
 
