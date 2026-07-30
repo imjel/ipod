@@ -19,7 +19,7 @@ export default function NowPlayingView() {
   }
 
   return (
-    <div className="flex flex-col items-center p-3 h-full w-full justify-between">
+    <div className="view-layout flex flex-col items-center justify-between">
       <section className="flex flex-row gap-2 ">
         {albumArt && (
           <img

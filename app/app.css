@@ -373,3 +373,9 @@ body {
   border-top: 1px solid #768294;
   border-bottom: 1px solid #a8b3c2;
 }
+
+.view-layout {
+  padding: 12px;
+  height: 100%;
+  width: 100%;
+}
