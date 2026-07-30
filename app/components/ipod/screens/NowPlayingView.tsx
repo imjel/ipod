@@ -19,13 +19,13 @@ export default function NowPlayingView() {
   }
 
   return (
-    <div className="view-layout flex flex-col items-center justify-between">
-      <section className="flex flex-row gap-2 ">
+    <div className="view-layout flex flex-col items-start justify-between">
+      <section className="flex flex-row gap-2">
         {albumArt && (
           <img
             src={albumArt}
             alt={currentTrack.album.name}
-            className="w-20 h-20 shadow-sm"
+            className="w-20 h-20 shadow-sm items-left"
           />
         )}
         <ul className="min-w-0 flex-1 flex-col items-start text-start">
