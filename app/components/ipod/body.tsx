@@ -1,15 +1,17 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import Wheel from "./wheel";
 import Screen from "./screen";
-import { type SideEnum, getMenuItems } from "./types";
+import { type SideEnum, type iPodRoute } from "./routes/types";
 import { useAuth } from "~/context/AuthContext";
 import { usePlayback } from "~/context/PlaybackContext";
 import type { SpotifyTrack } from "~/lib/spotify.types";
 import { useSpotify } from "~/hooks/useSpotify";
+import { getStaticMenuItems } from "./routes/types";
+import { useMenuItems } from "~/hooks/useMenuItems";
 
 export default function Body() {
-  const [currentScreen, setCurrentScreen] = useState("home");
-  const [menuStack, setMenuStack] = useState(["home"]); // layers of routes
+  const [menuStack, setMenuStack] = useState<iPodRoute[]>([{ screen: "home" }]); // layers of routes
+  const currentScreen = menuStack[menuStack.length - 1];
   const [currentSide, setCurrentSide] = useState<SideEnum>("front");
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const { client, isReady } = useSpotify();
@@ -17,33 +19,37 @@ export default function Body() {
   const { currentTrack, togglePlayPause, next, prev, deviceId } = usePlayback();
   const prevTrackRef = useRef<SpotifyTrack | null>(null);
 
-  const shuffle = async () => {
+  const shuffle = useCallback(async () => {
     if (!isReady || !deviceId) return;
     await client.shuffle(true, deviceId);
     await client.play(deviceId);
-  };
+  }, [client, isReady, deviceId]);
 
-  const menuItems = useMemo(
-    () => getMenuItems(signOut, shuffle),
+  const playTrack = useCallback(
+    async (uri: string) => {
+      if (!deviceId) return;
+      await client.playTrack(deviceId, { uris: [uri] });
+    },
+    [client, deviceId],
+  );
+
+  const staticMenus = useMemo(
+    () => getStaticMenuItems(signOut, shuffle),
     [signOut, shuffle],
   );
+  const menuItems = useMenuItems(currentScreen, staticMenus, playTrack);
 
   const handleSelect = useCallback(() => {
     // navigation
     if (selectedIndex === -1) return;
-    const currentItem = menuItems[currentScreen][selectedIndex];
-    switch (currentItem.type) {
-      case "submenu":
-        setMenuStack((prev) => [...prev, currentItem.route]);
-        setCurrentScreen(currentItem.route);
-        setSelectedIndex(-1);
-        break;
-      case "action":
-        currentItem.action();
-        break;
-      case "song":
-        // play song from spotify player
-        break;
+    if (!menuItems) return;
+    const currentItem = menuItems[selectedIndex];
+    if (!currentItem) return;
+    currentItem.action?.();
+    const route = currentItem.route;
+    if (route) {
+      setMenuStack((prev) => [...prev, route]);
+      setSelectedIndex(-1);
     }
   }, [selectedIndex, currentScreen, menuItems]);
 
@@ -51,7 +57,7 @@ export default function Body() {
     // send user back to the previous menu
     if (menuStack.length > 1) {
       setMenuStack((prev) => prev.slice(0, -1));
-      setCurrentScreen(menuStack[menuStack.length - 2]);
+      // setCurrentScreen(menuStack[menuStack.length - 2]);
       setSelectedIndex(0);
     } else {
       return;
@@ -61,13 +67,15 @@ export default function Body() {
   // delta from wheel onScroll useCallback
   const handleScroll = useCallback(
     (delta: number) => {
-      const items = menuItems[currentScreen] || [];
       if (selectedIndex === -1) {
         //first scroll, so select the first item
         setSelectedIndex(0);
       } else {
         const newIndex = selectedIndex + delta;
-        const clampedIndex = Math.max(0, Math.min(newIndex, items.length - 1));
+        const clampedIndex = Math.max(
+          0,
+          Math.min(newIndex, menuItems.length - 1),
+        );
         setSelectedIndex(clampedIndex);
       }
     },
@@ -92,8 +100,7 @@ export default function Body() {
 
   useEffect(() => {
     if (!prevTrackRef.current && currentTrack) {
-      setMenuStack((prev) => [...prev, "NowPlaying"]);
-      setCurrentScreen("NowPlaying");
+      setMenuStack((prev) => [...prev, { screen: "NowPlaying" }]);
       setSelectedIndex(-1);
     }
     prevTrackRef.current = currentTrack;
@@ -126,7 +133,7 @@ export default function Body() {
             <div className="absolute left-1/2 -translate-x-1/2 mt-[24.5px]">
               <Screen
                 selectedIndex={selectedIndex}
-                currentScreen={currentScreen}
+                currentScreen={currentScreen.screen}
                 onHover={setSelectedIndex}
                 menuItems={menuItems}
               />
