@@ -8,6 +8,7 @@ import { useAuth } from "~/context/AuthContext";
 import LoginView from "./screens/LoginView";
 import type { MenuItem } from "./types";
 import NowPlayingView from "./screens/NowPlayingView";
+import PlaylistView from "./screens/PlaylistView";
 
 export interface ScreenProps {
   selectedIndex: number;
@@ -63,6 +64,8 @@ export default function Screen({
   const renderScreen = () => {
     if (currentScreen === "NowPlaying") {
       return <NowPlayingView />;
+    } else if (currentScreen === "Playlists") {
+      return <PlaylistView />;
     } else {
       return (
         <MenuView
