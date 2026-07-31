@@ -6,15 +6,16 @@ import ScreenHeader from "./screens/ScreenHeader";
 import MenuView from "./screens/MenuView";
 import { useAuth } from "~/context/AuthContext";
 import LoginView from "./screens/LoginView";
-import type { MenuItem } from "./types";
+import type { MenuItem } from "./routes/types";
 import NowPlayingView from "./screens/NowPlayingView";
-import PlaylistView from "./screens/PlaylistView";
+import { AboutView } from "./screens/AboutView";
+// import PlaylistView from "./screens/PlaylistView";
 
 export interface ScreenProps {
   selectedIndex: number;
   currentScreen: string;
   onHover?: (index: number) => void;
-  menuItems: Record<string, MenuItem[]>;
+  menuItems: MenuItem[];
 }
 
 export default function Screen({
@@ -64,8 +65,10 @@ export default function Screen({
   const renderScreen = () => {
     if (currentScreen === "NowPlaying") {
       return <NowPlayingView />;
-    } else if (currentScreen === "Playlists") {
-      return <PlaylistView />;
+      // } else if (currentScreen === "Playlists") {
+      //   return <PlaylistView />;
+    } else if (currentScreen === "About") {
+      return <AboutView />;
     } else {
       return (
         <MenuView

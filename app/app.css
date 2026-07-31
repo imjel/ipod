@@ -36,6 +36,22 @@
   --shadow-opacity: 0.4;
 }
 
+:root[data-ipod-color="blue"] {
+  --color-ipod-base: var(--color-ipod-blue);
+}
+:root[data-ipod-color="gray"] {
+  --color-ipod-base: var(--color-ipod-gray);
+}
+:root[data-ipod-color="pink"] {
+  --color-ipod-base: var(--color-ipod-pink);
+}
+:root[data-ipod-color="green"] {
+  --color-ipod-base: var(--color-ipod-green);
+}
+:root[data-ipod-color="black"] {
+  --color-ipod-base: var(--color-ipod-black);
+}
+
 @font-face {
   font-family: "Helvetica";
   src: url("public/fonts/HelveticaNeueRoman.otf") format("opentype");
@@ -373,6 +389,46 @@ body {
   border-top: 1px solid #768294;
   border-bottom: 1px solid #a8b3c2;
 }
+
+/* SCROLL BAR */
+
+/* width */
+::-webkit-scrollbar {
+  width: 12px;
+  height: 100%;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background-image: linear-gradient(
+    to right,
+    #bac6d7,
+    #c0ccdc,
+    #e7f7fb,
+    #dde6f1,
+    #d3deec,
+    #a8b3c2
+  );
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  min-height: 30%;
+  background-image: linear-gradient(
+    to right,
+    #5b9fdd,
+    #69b7ff,
+    #e7f7fb,
+    #69b7ff,
+    #5b9fdd,
+    #69b7ff
+  );
+}
+
+/* Handle on hover
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+} */
 
 .view-layout {
   padding: 12px;

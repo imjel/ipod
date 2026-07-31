@@ -31,7 +31,12 @@ export interface SpotifyTrack {
   };
 }
 
+export interface SpotifyPlaylistTrack {
+  track: SpotifyTrack;
+}
+
 export interface SpotifyPlaylist {
+  id: string;
   name: string;
   description: string;
   uri: string;

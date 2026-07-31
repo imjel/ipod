@@ -1,4 +1,8 @@
-import type { SpotifyPagingObject, SpotifyPlaylist } from "./spotify.types";
+import type {
+  SpotifyPagingObject,
+  SpotifyPlaylist,
+  SpotifyPlaylistTrack,
+} from "./spotify.types";
 
 /**
  * class that makes request to Spotify's API
@@ -48,7 +52,9 @@ export class SpotifyClient {
     return this.fetch("/me/playlists");
   }
 
-  async getPlaylistTracks(id: string) {
+  async getPlaylistTracks(
+    id: string,
+  ): Promise<SpotifyPagingObject<SpotifyPlaylistTrack>> {
     return this.fetch(`/playlists/${id}/tracks`);
   }
 
@@ -66,6 +72,21 @@ export class SpotifyClient {
   async play(deviceId: string) {
     return this.fetch(`/me/player/play?device_id=${deviceId}`, {
       method: "PUT",
+    });
+  }
+
+  async playTrack(
+    deviceId: string,
+    options?: { uris?: string[]; contextUri?: string },
+  ) {
+    return this.fetch(`/me/player/play?device_id=${deviceId}`, {
+      method: "PUT",
+      body: options
+        ? JSON.stringify({
+            ...(options.uris && { uris: options.uris }),
+            ...(options.contextUri && { context_uri: options.contextUri }),
+          })
+        : undefined,
     });
   }
 }

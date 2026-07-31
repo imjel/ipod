@@ -1,3 +1,5 @@
+// this isn't being used right now, but I kept it here bc I may come back for the design
+// it's more like the later iPod gens...
 import { useEffect, useState } from "react";
 import { useSpotify } from "~/hooks/useSpotify";
 import type { SpotifyPlaylist } from "~/lib/spotify.types";
