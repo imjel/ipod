@@ -36,6 +36,22 @@
   --shadow-opacity: 0.4;
 }
 
+:root[data-ipod-color="blue"] {
+  --color-ipod-base: var(--color-ipod-blue);
+}
+:root[data-ipod-color="gray"] {
+  --color-ipod-base: var(--color-ipod-gray);
+}
+:root[data-ipod-color="pink"] {
+  --color-ipod-base: var(--color-ipod-pink);
+}
+:root[data-ipod-color="green"] {
+  --color-ipod-base: var(--color-ipod-green);
+}
+:root[data-ipod-color="black"] {
+  --color-ipod-base: var(--color-ipod-black);
+}
+
 @font-face {
   font-family: "Helvetica";
   src: url("public/fonts/HelveticaNeueRoman.otf") format("opentype");

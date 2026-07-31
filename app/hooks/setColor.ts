@@ -1,25 +1,22 @@
-type IpodColor = { label: string; code: string };
+type iPodColor = { label: string };
 
-export const IPOD_COLORS = [
+export const IPOD_COLORS: iPodColor[] = [
   {
     label: "Pink",
-    code: "#d7499b",
   },
   {
     label: "Blue",
-    code: "#02abd6",
   },
-  { label: "Gray", code: "#e7e9e8" },
+  { label: "Gray" },
   {
     label: "Green",
-    code: "#afd157",
   },
   {
     label: "Black",
-    code: "#0e2632",
   },
 ];
 
-export function setColor(color: IpodColor) {
-  document.documentElement.style.setProperty("--color-ipod-base", color.code);
+export function setColor(color: iPodColor) {
+  document.documentElement.dataset.ipodColor = color.label.toLowerCase();
+  localStorage.setItem("ipod-color", color.label.toLowerCase());
 }
