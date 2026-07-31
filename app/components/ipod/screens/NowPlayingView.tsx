@@ -29,9 +29,9 @@ export default function NowPlayingView() {
           />
         )}
         <ul className="min-w-0 flex-1 flex-col items-start text-start">
-          <li className="text-sm truncate w-auto">{trackName}</li>
-          <li className="text-sm truncate w-full">{artistNames}</li>
-          <li className="text-sm truncate w-auto">{currentTrack.album.name}</li>
+          <li className="text-md truncate w-auto">{trackName}</li>
+          <li className="text-md truncate w-full">{artistNames}</li>
+          <li className="text-md truncate w-auto">{currentTrack.album.name}</li>
         </ul>
       </section>
 
