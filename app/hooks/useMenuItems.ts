@@ -38,6 +38,24 @@ export function useMenuItems(
             route: { screen: "NowPlaying" },
           }));
         }
+        case "Artists": {
+          const res = await client.getTopArtists();
+          return res.items.map((artist) => ({
+            label: artist.name,
+            route: {
+              screen: "Artist",
+              artistId: artist.id,
+            },
+          }));
+        }
+        case "Artist": {
+          const res = await client.getArtistTopTracks(route.artistId);
+          return res.map((t) => ({
+            label: t.name,
+            action: () => playTrack(t.uri),
+            route: { screen: "NowPlaying" },
+          }));
+        }
         default:
           return null;
       }
