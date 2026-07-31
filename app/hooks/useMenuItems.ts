@@ -2,7 +2,7 @@ import type {
   iPodRoute,
   Screen,
   MenuItem,
-} from "~/components/ipod/routes/types";
+} from "~/components/ipod/routes/routes";
 import { useSpotify } from "./useSpotify";
 import { useState, useEffect } from "react";
 
