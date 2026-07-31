@@ -2,7 +2,7 @@ import type {
   iPodRoute,
   Screen,
   MenuItem,
-} from "~/components/ipod/routes/types";
+} from "~/components/ipod/routes/routes";
 import { useSpotify } from "./useSpotify";
 import { useState, useEffect } from "react";
 
@@ -35,6 +35,24 @@ export function useMenuItems(
           return res.items.map((t) => ({
             label: t.track.name,
             action: () => playTrack(t.track.uri),
+            route: { screen: "NowPlaying" },
+          }));
+        }
+        case "Artists": {
+          const res = await client.getTopArtists();
+          return res.items.map((artist) => ({
+            label: artist.name,
+            route: {
+              screen: "Artist",
+              artistId: artist.id,
+            },
+          }));
+        }
+        case "Artist": {
+          const res = await client.getArtistTopTracks(route.artistId);
+          return res.map((t) => ({
+            label: t.name,
+            action: () => playTrack(t.uri),
             route: { screen: "NowPlaying" },
           }));
         }

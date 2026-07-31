@@ -60,7 +60,7 @@ export function AuthProvider({
       provider: "spotify",
       options: {
         scopes:
-          "user-read-email user-read-private playlist-read-private playlist-read-collaborative user-modify-playback-state user-read-playback-state user-read-currently-playing streaming",
+          "user-read-email user-read-private playlist-read-private playlist-read-collaborative user-modify-playback-state user-read-playback-state user-read-currently-playing streaming user-top-read",
         redirectTo: `${window.location.origin}/callback`,
       },
     });

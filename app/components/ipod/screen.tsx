@@ -6,7 +6,7 @@ import ScreenHeader from "./screens/ScreenHeader";
 import MenuView from "./screens/MenuView";
 import { useAuth } from "~/context/AuthContext";
 import LoginView from "./screens/LoginView";
-import type { MenuItem } from "./routes/types";
+import type { MenuItem } from "./routes/routes";
 import NowPlayingView from "./screens/NowPlayingView";
 import { AboutView } from "./screens/AboutView";
 // import PlaylistView from "./screens/PlaylistView";

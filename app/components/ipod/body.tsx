@@ -1,12 +1,12 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import Wheel from "./wheel";
 import Screen from "./screen";
-import { type SideEnum, type iPodRoute } from "./routes/types";
+import { type SideEnum, type iPodRoute } from "./routes/routes";
 import { useAuth } from "~/context/AuthContext";
 import { usePlayback } from "~/context/PlaybackContext";
 import type { SpotifyTrack } from "~/lib/spotify.types";
 import { useSpotify } from "~/hooks/useSpotify";
-import { getStaticMenuItems } from "./routes/types";
+import { getStaticMenuItems } from "./routes/routes";
 import { useMenuItems } from "~/hooks/useMenuItems";
 
 export default function Body() {

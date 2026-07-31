@@ -1,7 +1,9 @@
 import type {
+  SpotifyArtist,
   SpotifyPagingObject,
   SpotifyPlaylist,
   SpotifyPlaylistTrack,
+  SpotifyTrack,
 } from "./spotify.types";
 
 /**
@@ -58,8 +60,22 @@ export class SpotifyClient {
     return this.fetch(`/playlists/${id}/tracks`);
   }
 
-  async getTopArtists() {
-    return this.fetch("/me/top/artists?time_range=medium_term");
+  async getTopArtists(): Promise<SpotifyPagingObject<SpotifyArtist>> {
+    return this.fetch(
+      "/me/top/artists?offset=0&limit=10&time_range=medium_term",
+    );
+  }
+
+  // not in use
+  async getArtistDetails(artistId: string): Promise<SpotifyArtist> {
+    return this.fetch(`/artists/${artistId}`);
+  }
+
+  async getArtistTopTracks(artistId: string): Promise<SpotifyTrack[]> {
+    const res = await this.fetch<{ tracks: SpotifyTrack[] }>(
+      `/artists/${artistId}/top-tracks?market=US`,
+    );
+    return res.tracks;
   }
 
   async shuffle(state = true, deviceId: string) {
