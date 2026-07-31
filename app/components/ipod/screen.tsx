@@ -8,6 +8,7 @@ import { useAuth } from "~/context/AuthContext";
 import LoginView from "./screens/LoginView";
 import type { MenuItem } from "./routes/types";
 import NowPlayingView from "./screens/NowPlayingView";
+import { AboutView } from "./screens/AboutView";
 // import PlaylistView from "./screens/PlaylistView";
 
 export interface ScreenProps {
@@ -66,6 +67,8 @@ export default function Screen({
       return <NowPlayingView />;
       // } else if (currentScreen === "Playlists") {
       //   return <PlaylistView />;
+    } else if (currentScreen === "About") {
+      return <AboutView />;
     } else {
       return (
         <MenuView
