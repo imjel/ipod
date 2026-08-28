@@ -1,23 +1,25 @@
 import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import Wheel from "./wheel";
 import Screen from "./screen";
-import { type SideEnum, type iPodRoute } from "./routes/routes";
+import { type iPodRoute } from "./routes/routes";
 import { useAuth } from "~/context/AuthContext";
 import { usePlayback } from "~/context/PlaybackContext";
 import type { SpotifyTrack } from "~/lib/spotify.types";
 import { useSpotify } from "~/hooks/useSpotify";
 import { getStaticMenuItems } from "./routes/routes";
 import { useMenuItems } from "~/hooks/useMenuItems";
+import { useDragToRotate } from "~/hooks/useDragToRotate";
 
 export default function Body() {
   const [menuStack, setMenuStack] = useState<iPodRoute[]>([{ screen: "home" }]); // layers of routes
   const currentScreen = menuStack[menuStack.length - 1];
-  const [currentSide, setCurrentSide] = useState<SideEnum>("front");
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const { client, isReady } = useSpotify();
   const { signOut } = useAuth();
   const { currentTrack, togglePlayPause, next, prev, deviceId } = usePlayback();
   const prevTrackRef = useRef<SpotifyTrack | null>(null);
+  const { itemRef, handleMouseDown, handleMouseMove, resetPosition } =
+    useDragToRotate();
 
   const shuffle = useCallback(async () => {
     if (!isReady || !deviceId) return;
@@ -94,10 +96,6 @@ export default function Body() {
     prev();
   };
 
-  const handleSideChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrentSide(e.target.value as SideEnum);
-  };
-
   useEffect(() => {
     if (!prevTrackRef.current && currentTrack) {
       setMenuStack((prev) => [...prev, { screen: "NowPlaying" }]);
@@ -126,10 +124,14 @@ export default function Body() {
 
   return (
     <div className="ipod-scene flex flex-col items-center gap-2 pt-10">
-      <div className={`ipod show-${currentSide}`}>
+      <div
+        ref={itemRef}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        className="ipod"
+      >
         <div className="ipod-body ipod-body-front">
           <div className="flex flex-col w-full">
-            {/* <Screen /> */}
             <div className="absolute left-1/2 -translate-x-1/2 mt-[24.5px]">
               <Screen
                 selectedIndex={selectedIndex}
@@ -138,7 +140,6 @@ export default function Body() {
                 menuItems={menuItems}
               />
             </div>
-            {/* control wheel */}
             <div className="absolute top-[47%] left-1/2 -translate-x-1/2">
               <Wheel
                 onMenu={handleMenu}
@@ -157,68 +158,13 @@ export default function Body() {
         <div className="ipod-body ipod-body-top"></div>
         <div className="ipod-body ipod-body-bottom"></div>
       </div>
-      <div className="radio-group flex flex-row gap-2">
-        <label>
-          <input
-            type="radio"
-            name="rotate-ipod-side"
-            value="front"
-            checked={currentSide === "front"}
-            onChange={handleSideChange}
-          />{" "}
-          front
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="rotate-ipod-side"
-            value="right"
-            checked={currentSide === "right"}
-            onChange={handleSideChange}
-          />{" "}
-          right
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="rotate-ipod-side"
-            value="back"
-            checked={currentSide === "back"}
-            onChange={handleSideChange}
-          />{" "}
-          back
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="rotate-ipod-side"
-            value="left"
-            checked={currentSide === "left"}
-            onChange={handleSideChange}
-          />{" "}
-          left
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="rotate-ipod-side"
-            value="top"
-            checked={currentSide === "top"}
-            onChange={handleSideChange}
-          />{" "}
-          top
-        </label>
-        <label>
-          <input
-            type="radio"
-            name="rotate-ipod-side"
-            value="bottom"
-            checked={currentSide === "bottom"}
-            onChange={handleSideChange}
-          />{" "}
-          bottom
-        </label>
-      </div>
+      <button
+        type="button"
+        onClick={resetPosition}
+        className="hover:text-ipod-blue z-1000"
+      >
+        reset position
+      </button>
     </div>
   );
 }
