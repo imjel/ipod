@@ -1,4 +1,3 @@
-export type SideEnum = "front" | "back" | "right" | "left" | "top" | "bottom";
 import { IPOD_COLORS, setColor } from "~/hooks/setColor";
 
 export type iPodRoute =
