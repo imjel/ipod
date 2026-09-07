@@ -5,6 +5,11 @@ export function canPlay(card: Card, topOfWaste: Card): boolean {
   return compareCards(card, topOfWaste) === 1;
 }
 
+function isColumnPlayable(column: Card[], topCard: Card): boolean {
+  const card = column.at(-1);
+  return card !== undefined && canPlay(card, topCard);
+}
+
 // win = every column in the tableau is cleared
 export function isWin(state: GameState): boolean {
   return state.tableau.every((column) => column.length === 0);
@@ -21,7 +26,6 @@ export function isStuck(state: GameState): boolean {
   if (!top) return false;
 
   return !state.tableau.some((col) => {
-    const card = col.at(-1);
-    return card !== undefined && canPlay(card, top);
+    isColumnPlayable(col, top);
   });
 }
