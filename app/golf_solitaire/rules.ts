@@ -25,7 +25,5 @@ export function isStuck(state: GameState): boolean {
   const top = state.waste.at(-1);
   if (!top) return false;
 
-  return !state.tableau.some((col) => {
-    isColumnPlayable(col, top);
-  });
+  return !state.tableau.some((col) => isColumnPlayable(col, top));
 }
