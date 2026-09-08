@@ -7,16 +7,16 @@ interface GameAlertProps {
 export function GameAlert({ message, onUndo, onRestart }: GameAlertProps) {
   return (
     <div className="game-alert">
-      <p>{message}</p>
+      <p className="game-alert-message">{message}</p>
       <section className="flex flex-col justify-between">
         {onUndo && (
           <button className="game-alert-action" onClick={onUndo}>
-            undo
+            Undo
           </button>
         )}
         {onRestart && (
           <button className="game-alert-action" onClick={onRestart}>
-            restart
+            Restart
           </button>
         )}
       </section>

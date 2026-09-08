@@ -8,7 +8,7 @@
   --card-back: rgb(40, 102, 177);
   --sol-font: var(--font-helvetica, "Helvetica", sans-serif);
   --sol-surface: var(--color-screen-light, #f0f6fa);
-  --sol-surface-dark: var(--color-screen-dark, #959fa6);
+  --sol-surface-dark: var(--color-screen-dark, #d2e0ea);
   --sol-border: var(--color-screen-border, #515a65);
   --sol-select: var(--color-select, #2299d7);
   --sol-select-border: var(--color-ipod-blue-border, #218499);
@@ -122,6 +122,7 @@
   display: grid;
   place-items: center;
   z-index: 10;
+  background-color: var(--color-screen-dark);
 }
 
 .game-alert {
@@ -129,41 +130,36 @@
   height: 80%;
   display: flex;
   flex-direction: column;
-  padding: 10px;
-  font-size: small;
-  background: linear-gradient(
-    to bottom,
-    var(--sol-surface) 90%,
-    var(--sol-surface-dark)
-  );
+  padding: 0;
+  font-size: medium;
+  background:
+    linear-gradient(to left, var(--sol-surface) 99%, var(--sol-surface-dark)),
+    linear-gradient(to right, var(--sol-surface) 99%, var(--sol-surface-dark));
   color: black;
   border: 1px solid var(--sol-border);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  justify-content: space-between;
 }
 
 .game-alert-message {
-  padding: 2px 4px;
+  padding: 8px 6px;
   text-align: center;
-  font-weight: 600;
-  color: white;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
-  background: linear-gradient(to bottom, #3aa8dd, var(--sol-select));
-  border-bottom: 1px solid var(--sol-select-border);
+  font-weight: 400;
 }
 
 .game-alert-action {
   display: block;
   width: 100%;
-  padding: 1px 4px;
   text-align: left;
   background: none;
   border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  padding: 1px 6px;
 }
 
 .game-alert-action:hover,
 .game-alert-action[data-selected="true"] {
-  background: linear-gradient(to bottom, #3aa8dd, var(--sol-select));
+  background: var(--sol-select);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
   color: white;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
 }

@@ -8,12 +8,13 @@ export default function MenuView({
 }: ScreenProps) {
   return (
     <div className="overflow-y-auto">
-      <ul className="cursor-pointer">
+      <ul className="ipod-menu">
         {menuItems.map((item, index) => (
           <li
-            className={`flex flex-row justify-between px-1 items-center font-regular font-helvetica ${index === selectedIndex ? "bg-select text-white" : "hover:bg-select hover:text-white"}`}
+            className="ipod-menu-item"
             key={item.label}
             onMouseEnter={() => onHover?.(index)}
+            data-selected={index === selectedIndex}
           >
             <span className="w-full truncate">{item.label}</span>
             {item.route && <MdChevronRight size={18} />}
