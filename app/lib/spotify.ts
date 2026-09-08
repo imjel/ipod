@@ -1,4 +1,5 @@
 import type {
+  PlayOptions,
   SpotifyArtist,
   SpotifyPagingObject,
   SpotifyPlaylist,
@@ -33,7 +34,10 @@ export class SpotifyClient {
     });
 
     if (!response.ok) {
-      throw new Error(`Spotify API error: ${response.status}`);
+      const detail = await response.text().catch(() => "");
+      throw new Error(
+        `Spotify API error: ${response.status} on ${endpoint}${detail ? ` - ${detail}` : ""}`,
+      );
     }
 
     // 204 errors for no content on music player actions
@@ -66,6 +70,12 @@ export class SpotifyClient {
     );
   }
 
+  async getTopTracks(limit = 50): Promise<SpotifyPagingObject<SpotifyTrack>> {
+    return this.fetch(
+      `/me/top/tracks?offset=0&limit=${limit}&time_range=medium_term`,
+    );
+  }
+
   // not in use
   async getArtistDetails(artistId: string): Promise<SpotifyArtist> {
     return this.fetch(`/artists/${artistId}`);
@@ -76,6 +86,13 @@ export class SpotifyClient {
       `/artists/${artistId}/top-tracks?market=US`,
     );
     return res.tracks;
+  }
+
+  async transferPlayback(deviceId: string, play = false) {
+    return this.fetch("/me/player", {
+      method: "PUT",
+      body: JSON.stringify({ device_ids: [deviceId], play }),
+    });
   }
 
   async shuffle(state = true, deviceId: string) {
@@ -91,16 +108,14 @@ export class SpotifyClient {
     });
   }
 
-  async playTrack(
-    deviceId: string,
-    options?: { uris?: string[]; contextUri?: string },
-  ) {
+  async playTrack(deviceId: string, options?: PlayOptions) {
     return this.fetch(`/me/player/play?device_id=${deviceId}`, {
       method: "PUT",
       body: options
         ? JSON.stringify({
             ...(options.uris && { uris: options.uris }),
             ...(options.contextUri && { context_uri: options.contextUri }),
+            ...(options.offsetUri && { offset: { uri: options.offsetUri } }),
           })
         : undefined,
     });
