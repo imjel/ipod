@@ -8,7 +8,7 @@
   --card-back: rgb(40, 102, 177);
   --sol-font: var(--font-helvetica, "Helvetica", sans-serif);
   --sol-surface: var(--color-screen-light, #f0f6fa);
-  --sol-surface-dark: var(--color-screen-dark, #d2e0ea);
+  --sol-surface-dark: var(--color-screen-dark, rgb(210, 224, 234));
   --sol-border: var(--color-screen-border, #515a65);
   --sol-select: var(--color-select, #2299d7);
   --sol-select-border: var(--color-ipod-blue-border, #218499);
@@ -59,6 +59,34 @@
   color: white;
   font-size: x-small;
   cursor: pointer;
+  overflow: hidden;
+}
+
+.card-label {
+  height: calc(var(--card-h) * 0.2);
+  font-size: calc(var(--card-h) * 0.18);
+  line-height: 1.5;
+}
+
+.card-pips {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(9, minmax(0, 1fr));
+  place-items: center;
+  font-size: calc(var(--card-h) * 0.1 + var(--card-h) * 0.3 / (var(--pips)));
+  padding-block: 0.65em;
+  padding-inline: 0.35em;
+  min-height: 0;
+}
+.card-pips span {
+  line-height: 1%;
+}
+
+.face-card {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  font-size: calc(var(--card-w) * 0.9);
 }
 
 .tableau {
@@ -122,7 +150,7 @@
   display: grid;
   place-items: center;
   z-index: 10;
-  background-color: var(--color-screen-dark);
+  background-color: rgb(210, 224, 234, 0.5);
 }
 
 .game-alert {

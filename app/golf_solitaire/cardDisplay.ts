@@ -1,4 +1,9 @@
-import type { CardValue, FaceCard, Suit } from "./solitaire.types";
+import {
+  type CardValue,
+  type FaceCard,
+  type FaceCardValue,
+  type Suit,
+} from "./solitaire.types";
 
 export function cardValueToStr(val: CardValue): FaceCard | string {
   switch (val) {
@@ -19,4 +24,8 @@ export function getSuitColor(suit: Suit) {
   return suit.name === "Diamonds" || suit.name === "Hearts"
     ? "red-suits"
     : "black-suits";
+}
+
+export function isFaceCard(value: CardValue): value is FaceCardValue {
+  return value >= 11;
 }
