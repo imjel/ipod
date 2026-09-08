@@ -6,8 +6,8 @@ export function AboutView() {
           (˶{"\xa0\xa0"}ᵔ{"\xa0\xa0"} ̫{"\xa0\xa0"}ᵔ{"\xa0\xa0"}˶) ♡{" "}
         </span>
         <span>
-          hi! I'm max. this is a fun project I made to learn more CSS & relive
-          my iPod nano childhood
+          hi! I'm max. this is a fun project I made to learn more CSS & revisit
+          the memories of my childhood iPod Nano
         </span>
       </p>
     </div>
