@@ -10,7 +10,9 @@ export type iPodRoute =
   | { screen: "PlaylistTracks"; playlistId: string }
   | { screen: "NowPlaying" }
   | { screen: "Artists" }
-  | { screen: "Artist"; artistId: string };
+  | { screen: "Artist"; artistId: string }
+  | { screen: "Games" }
+  | { screen: "Solitaire" };
 
 export type Screen = iPodRoute["screen"];
 
@@ -27,6 +29,7 @@ export function getStaticMenuItems(
   return {
     home: [
       { label: "Music", route: { screen: "Music" } },
+      { label: "Games", route: { screen: "Games" } },
       { label: "Settings", route: { screen: "Settings" } },
       { label: "Shuffle Songs", action: () => shuffle() },
     ],
@@ -37,6 +40,7 @@ export function getStaticMenuItems(
       // { label: "Songs", route: "Songs" },
       { label: "Now Playing", route: { screen: "NowPlaying" } },
     ],
+    Games: [{ label: "Solitaire", route: { screen: "Solitaire" } }],
     Settings: [
       { label: "About", route: { screen: "About" } },
       {

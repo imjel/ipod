@@ -1,0 +1,193 @@
+.solitaire-board {
+  --card-w: 28px;
+  --card-h: 40px;
+  --peek: 13px;
+  --col-h: calc(var(--card-h) + 4 * var(--peek));
+  --red-suit: rgb(189, 0, 0);
+  --black-suit: black;
+  --card-back: rgb(40, 102, 177);
+  --sol-font: var(--font-helvetica, "Helvetica", sans-serif);
+  --sol-surface: var(--color-screen-light, #f0f6fa);
+  --sol-surface-dark: var(--color-screen-dark, rgb(210, 224, 234));
+  --sol-border: var(--color-screen-border, #515a65);
+  --sol-select: var(--color-select, #2299d7);
+  --sol-select-border: var(--color-ipod-blue-border, #218499);
+
+  width: fit-content;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  margin-inline: auto;
+  justify-content: space-between;
+  position: relative;
+  font-family: var(--sol-font);
+}
+
+.solitaire-card {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  height: var(--card-h);
+  width: var(--card-w);
+  box-shadow:
+    0 0 0 0.5px white inset,
+    0 0 0 0.5px black;
+  border: 1px solid;
+  border-radius: 10%;
+  border-color: white;
+  background: linear-gradient(to bottom, white 70%, rgb(234, 234, 234));
+  font-size: x-small;
+  text-align: start;
+}
+
+.solitaire-card-back {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  height: var(--card-h);
+  width: var(--card-w);
+  box-shadow:
+    0 0 0 0.5px rgb(198, 216, 237) inset,
+    0 0 0 0.5px black;
+  border: 1px solid;
+  border-radius: 10%;
+  border-color: white;
+  background-color: var(--card-back);
+  text-align: center;
+  color: white;
+  font-size: x-small;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.card-label {
+  height: calc(var(--card-h) * 0.2);
+  font-size: calc(var(--card-h) * 0.18);
+  line-height: 1.5;
+}
+
+.card-pips {
+  display: grid;
+  flex: 1;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(9, minmax(0, 1fr));
+  place-items: center;
+  font-size: calc(var(--card-h) * 0.1 + var(--card-h) * 0.3 / (var(--pips)));
+  padding-block: 0.65em;
+  padding-inline: 0.35em;
+  min-height: 0;
+}
+.card-pips span {
+  line-height: 1%;
+}
+
+.face-card {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+  font-size: calc(var(--card-w) * 0.9);
+}
+
+.tableau {
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: var(--col-h);
+  width: var(--card-w);
+  flex: 0 0 auto;
+}
+.column > .solitaire-card:not(:first-child) {
+  margin-top: calc(var(--peek) - var(--card-h));
+}
+.column:not(:disabled) > .solitaire-card:last-child:hover {
+  box-shadow:
+    0 0 0 1.5px rgb(255, 214, 64),
+    0 0 0 2px black;
+  cursor: pointer;
+}
+
+.red-suits {
+  color: var(--red-suit);
+}
+
+.black-suits {
+  color: var(--black-suit);
+}
+
+.stock-waste-section {
+  display: flex;
+  align-self: stretch;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.solitaire-menu {
+  display: flex;
+  flex-direction: row;
+  align-self: stretch;
+  justify-content: space-between;
+}
+
+.solitaire-menu-button {
+  font-size: x-small;
+}
+
+.solitaire-menu-button:hover {
+  color: blue;
+  cursor: pointer;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 10;
+  background-color: rgb(210, 224, 234, 0.5);
+}
+
+.game-alert {
+  width: 80%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  font-size: medium;
+  background:
+    linear-gradient(to left, var(--sol-surface) 99%, var(--sol-surface-dark)),
+    linear-gradient(to right, var(--sol-surface) 99%, var(--sol-surface-dark));
+  color: black;
+  border: 1px solid var(--sol-border);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  justify-content: space-between;
+}
+
+.game-alert-message {
+  padding: 8px 6px;
+  text-align: center;
+  font-weight: 400;
+}
+
+.game-alert-action {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 1px 6px;
+}
+
+.game-alert-action:hover,
+.game-alert-action[data-selected="true"] {
+  background: var(--sol-select);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  color: white;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.25);
+}
