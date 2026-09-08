@@ -18,7 +18,7 @@ export type Screen = iPodRoute["screen"];
 
 export type MenuItem = {
   label: string;
-  action?: () => void;
+  action?: () => void | Promise<void>;
   route?: iPodRoute;
 };
 

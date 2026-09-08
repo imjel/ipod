@@ -3,13 +3,14 @@ import type {
   Screen,
   MenuItem,
 } from "~/components/ipod/routes/routes";
+import type { PlayOptions } from "~/lib/spotify.types";
 import { useSpotify } from "./useSpotify";
 import { useState, useEffect } from "react";
 
 export function useMenuItems(
   route: iPodRoute,
   staticMenus: Partial<Record<Screen, MenuItem[]>>,
-  playTrack: (uri: string) => Promise<void>,
+  playTrack: (options: PlayOptions) => Promise<void>,
 ): MenuItem[] {
   const { client, isReady } = useSpotify();
   const [dynamicItems, setDynamicItems] = useState<MenuItem[]>([]);
@@ -32,9 +33,10 @@ export function useMenuItems(
         }
         case "PlaylistTracks": {
           const res = await client.getPlaylistTracks(route.playlistId);
+          const contextUri = `spotify:playlist:${route.playlistId}`;
           return res.items.map((t) => ({
             label: t.track.name,
-            action: () => playTrack(t.track.uri),
+            action: () => playTrack({ contextUri, offsetUri: t.track.uri }),
             route: { screen: "NowPlaying" },
           }));
         }
@@ -50,9 +52,10 @@ export function useMenuItems(
         }
         case "Artist": {
           const res = await client.getArtistTopTracks(route.artistId);
+          const uris = res.map((t) => t.uri);
           return res.map((t) => ({
             label: t.name,
-            action: () => playTrack(t.uri),
+            action: () => playTrack({ uris, offsetUri: t.uri }),
             route: { screen: "NowPlaying" },
           }));
         }

@@ -97,15 +97,23 @@ export function PlaybackProvider({ children }: { children: React.ReactNode }) {
     }
   }, [player]);
 
+  // nextTrack/previousTrack act on local playback
+  // if the device is active and has a queue, works; else noops
   const next = useCallback(async () => {
-    if (player) {
+    if (!player) return;
+    try {
       await player.nextTrack();
+    } catch (err) {
+      console.error("Skip to next failed:", err);
     }
   }, [player]);
 
   const prev = useCallback(async () => {
-    if (player) {
+    if (!player) return;
+    try {
       await player.previousTrack();
+    } catch (err) {
+      console.error("Skip to previous failed:", err);
     }
   }, [player]);
 
