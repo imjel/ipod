@@ -7,7 +7,7 @@ interface StockProps {
 
 export function Stock({ stock, draw }: StockProps) {
   return (
-    <button onClick={draw} className="ipod-card-back">
+    <button onClick={draw} className="solitaire-card-back">
       <span>{stock.length}</span>
     </button>
   );

@@ -32,3 +32,6 @@ export type Action =
   | { type: "playCard"; column: number }
   | { type: "draw" }
   | { type: "undo" };
+
+export const STUCK_MESSAGE = "You can't make any more moves D:";
+export const WIN_MESSAGE = "We have a winner!";

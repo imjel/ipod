@@ -12,6 +12,8 @@ export function SolitaireView() {
       playCard={playCard}
       newGame={newGame}
       undo={undo}
+      isWin={isWin}
+      isStuck={isStuck}
     />
   );
 }

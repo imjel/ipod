@@ -10,7 +10,7 @@ export function PlayingCard({ value, suit }: PlayingCardProps) {
   const color = getSuitColor(suit);
 
   return (
-    <div className={`ipod-card ${color}`}>
+    <div className={`solitaire-card ${color}`}>
       <span>
         {cardValueToStr(value)}
         {suit.symbol}

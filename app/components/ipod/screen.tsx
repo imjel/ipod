@@ -9,6 +9,7 @@ import LoginView from "./screens/LoginView";
 import type { MenuItem } from "./routes/routes";
 import NowPlayingView from "./screens/NowPlayingView";
 import { AboutView } from "./screens/AboutView";
+import { SolitaireView } from "~/golf_solitaire/components/SolitaireView";
 // import PlaylistView from "./screens/PlaylistView";
 
 export interface ScreenProps {
@@ -69,6 +70,12 @@ export default function Screen({
       //   return <PlaylistView />;
     } else if (currentScreen === "About") {
       return <AboutView />;
+    } else if (currentScreen === "Solitaire") {
+      return (
+        <div className="cards-screen-background">
+          <SolitaireView />
+        </div>
+      );
     } else {
       return (
         <MenuView
