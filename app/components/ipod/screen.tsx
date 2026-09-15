@@ -106,7 +106,7 @@ export default function Screen({
         className="screen-overlay"
         style={
           {
-            transform: `translate3d(${mousePosition.x}px, ${mousePosition.y}px, 0px)`,
+            transform: `translate3d(${mousePosition.x * 0.8}px, ${mousePosition.y * 0.8}px, 0px)`,
           } as React.CSSProperties
         }
       ></div>
