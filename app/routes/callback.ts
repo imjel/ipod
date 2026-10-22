@@ -16,12 +16,9 @@ export async function loader({ request }: Route.LoaderArgs) {
       token_hash: tokenHash,
     });
     if (!error) {
-      console.log("SUCCESSFULLY SIGNED IN WITH TOKEN HASH");
-
       const redirectTo = requestUrl.searchParams.get("next") || "/";
       return redirect(redirectTo, { headers });
     }
-    console.log("FAILED TO EXCHANGE CODE FOR SESSION");
   }
 
   const code = requestUrl.searchParams.get("code");

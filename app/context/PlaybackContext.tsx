@@ -61,18 +61,15 @@ export function PlaybackProvider({ children }: { children: React.ReactNode }) {
 
       // connected
       player.addListener("ready", ({ device_id }) => {
-        console.log("Ready with Device ID", device_id);
         setDeviceId(device_id);
         setIsReady(true);
       });
 
-      player.addListener("not_ready", ({ device_id }) => {
-        console.log("Device ID has gone offline", device_id);
+      player.addListener("not_ready", () => {
         setIsReady(false);
       });
 
       player.addListener("authentication_error", () => {
-        console.log("authentication error, signing out");
         signOut().catch(console.error);
       });
 
