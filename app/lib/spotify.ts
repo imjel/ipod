@@ -51,7 +51,13 @@ export class SpotifyClient {
     if (response.status === 204) {
       return undefined as T;
     }
-    return response.json();
+    const text = await response.text();
+    if (!text) return undefined as T;
+    try {
+      return JSON.parse(text) as T;
+    } catch {
+      return undefined as T;
+    }
   }
 
   // get user information
