@@ -29,7 +29,7 @@ interface PlaybackContextValue {
 const PlaybackContext = createContext<PlaybackContextValue | null>(null);
 
 export function PlaybackProvider({ children }: { children: React.ReactNode }) {
-  const { getSpotifyAccessToken, user } = useAuth();
+  const { getSpotifyAccessToken, user, signOut } = useAuth();
   const [player, setPlayer] = useState<PlaybackPlayer | null>(null);
   const [deviceId, setDeviceId] = useState<string | null>(null);
   const [playbackState, setPlaybackState] = useState<PlaybackState | null>(
@@ -71,6 +71,11 @@ export function PlaybackProvider({ children }: { children: React.ReactNode }) {
         setIsReady(false);
       });
 
+      player.addListener("authentication_error", () => {
+        console.log("authentication error, signing out");
+        signOut().catch(console.error);
+      });
+
       // player state changed
       player.addListener(
         "player_state_changed",
@@ -84,12 +89,18 @@ export function PlaybackProvider({ children }: { children: React.ReactNode }) {
       player.connect();
       setPlayer(player);
     };
-    return () => {
-      if (player) {
-        player.disconnect();
-      }
-    };
-  }, [user, getSpotifyAccessToken]);
+  }, [user, getSpotifyAccessToken, signOut]);
+
+  // clean up
+  useEffect(() => {
+    if (!user && player) {
+      player.disconnect();
+      setPlayer(null);
+      setDeviceId(null);
+      setIsReady(false);
+      setPlaybackState(null);
+    }
+  }, [user, player]);
 
   const togglePlayPause = useCallback(async () => {
     if (player) {
