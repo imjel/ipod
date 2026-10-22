@@ -5,12 +5,13 @@ export interface AuthState {
   session: Session | null;
   isLoading: boolean;
   isClientReady: boolean;
-  spotifyToken: string | null;
 }
 
 export interface AuthContextValue extends AuthState {
   supabase: SupabaseClient;
   signInWithSpotify: () => Promise<void>;
   signOut: () => Promise<void>;
-  getSpotifyAccessToken: () => Promise<string | null>;
+  getSpotifyAccessToken: (force?: boolean) => Promise<string | null>;
 }
+
+export const SPOTIFY_REFRESH_COOKIE = "spotify-refresh-token";

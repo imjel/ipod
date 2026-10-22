@@ -3,7 +3,7 @@ import { redirectWithError } from "remix-toast";
 import { createSupabaseServerClient } from "~/lib/supabase.server";
 import type { Route } from "./+types/callback";
 import { serializeCookieHeader } from "@supabase/ssr";
-import { SPOTIFY_REFRESH_COOKIE } from "./api.spotify-token";
+import { SPOTIFY_REFRESH_COOKIE } from "~/lib/auth.types";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const requestUrl = new URL(request.url);

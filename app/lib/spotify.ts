@@ -11,20 +11,14 @@ import type {
  * class that makes request to Spotify's API
  */
 export class SpotifyClient {
-  private getAccessToken: () => Promise<string | null>;
+  private getAccessToken: (force?: boolean) => Promise<string | null>;
 
-  constructor(getAccessToken: () => Promise<string | null>) {
+  constructor(getAccessToken: (force?: boolean) => Promise<string | null>) {
     this.getAccessToken = getAccessToken;
   }
 
-  private async fetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
-    const token = await this.getAccessToken();
-
-    if (!token) {
-      throw new Error("No access token");
-    }
-
-    const response = await fetch(`https://api.spotify.com/v1${endpoint}`, {
+  private request(endpoint: string, token: string, options?: RequestInit) {
+    return fetch(`https://api.spotify.com/v1${endpoint}`, {
       ...options,
       headers: {
         Authorization: `Bearer ${token}`,
@@ -32,6 +26,20 @@ export class SpotifyClient {
         ...options?.headers,
       },
     });
+  }
+
+  private async fetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
+    const token = await this.getAccessToken();
+    if (!token) {
+      throw new Error("No access token");
+    }
+
+    let response = await this.request(endpoint, token, options);
+    if (response.status === 401) {
+      const refreshedToken = await this.getAccessToken(true);
+      if (!refreshedToken) throw new Error("No access token");
+      response = await this.request(endpoint, token, options);
+    }
 
     if (!response.ok) {
       const detail = await response.text().catch(() => "");
@@ -39,12 +47,10 @@ export class SpotifyClient {
         `Spotify API error: ${response.status} on ${endpoint}${detail ? ` - ${detail}` : ""}`,
       );
     }
-
     // 204 errors for no content on music player actions
     if (response.status === 204) {
       return undefined as T;
     }
-
     return response.json();
   }
 
