@@ -38,7 +38,7 @@ export class SpotifyClient {
     if (response.status === 401) {
       const refreshedToken = await this.getAccessToken(true);
       if (!refreshedToken) throw new Error("No access token");
-      response = await this.request(endpoint, token, options);
+      response = await this.request(endpoint, refreshedToken, options);
     }
 
     if (!response.ok) {
