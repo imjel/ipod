@@ -91,6 +91,10 @@ body {
   perspective: 500px;
 }
 
+.ipod-game-scene {
+  zoom: 1.9;
+}
+
 .ipod {
   width: 305px;
   height: 690px;
@@ -285,11 +289,12 @@ body {
 
 .screen-overlay {
   position: absolute;
-  top: -100%;
-  left: -100%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(
+  /* top: -100%;
+  left: -100%; */
+  /* width: 200%;
+  height: 200%; */
+  inset: -300px;
+  background: repeating-linear-gradient(
     to right,
     rgba(255, 255, 255, 0.927) 10%,
     rgba(43, 185, 232, 0.5) 20%,
@@ -299,9 +304,10 @@ body {
     rgba(255, 255, 255, 0.927) 70%,
     transparent 100%
   );
-  transition: transform 200ms ease-out;
+
   filter: brightness(0.85) contrast(2.5) saturate(0.65);
   opacity: 30%;
+  transition: transform 200ms ease-out;
   pointer-events: none;
 }
 

@@ -1,4 +1,5 @@
 import type {
+  PlayOptions,
   SpotifyArtist,
   SpotifyPagingObject,
   SpotifyPlaylist,
@@ -10,20 +11,14 @@ import type {
  * class that makes request to Spotify's API
  */
 export class SpotifyClient {
-  private getAccessToken: () => Promise<string | null>;
+  private getAccessToken: (force?: boolean) => Promise<string | null>;
 
-  constructor(getAccessToken: () => Promise<string | null>) {
+  constructor(getAccessToken: (force?: boolean) => Promise<string | null>) {
     this.getAccessToken = getAccessToken;
   }
 
-  private async fetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
-    const token = await this.getAccessToken();
-
-    if (!token) {
-      throw new Error("No access token");
-    }
-
-    const response = await fetch(`https://api.spotify.com/v1${endpoint}`, {
+  private request(endpoint: string, token: string, options?: RequestInit) {
+    return fetch(`https://api.spotify.com/v1${endpoint}`, {
       ...options,
       headers: {
         Authorization: `Bearer ${token}`,
@@ -31,16 +26,31 @@ export class SpotifyClient {
         ...options?.headers,
       },
     });
+  }
 
-    if (!response.ok) {
-      throw new Error(`Spotify API error: ${response.status}`);
+  private async fetch<T>(endpoint: string, options?: RequestInit): Promise<T> {
+    const token = await this.getAccessToken();
+    if (!token) {
+      throw new Error("No access token");
     }
 
+    let response = await this.request(endpoint, token, options);
+    if (response.status === 401) {
+      const refreshedToken = await this.getAccessToken(true);
+      if (!refreshedToken) throw new Error("No access token");
+      response = await this.request(endpoint, refreshedToken, options);
+    }
+
+    if (!response.ok) {
+      const detail = await response.text().catch(() => "");
+      throw new Error(
+        `Spotify API error: ${response.status} on ${endpoint}${detail ? ` - ${detail}` : ""}`,
+      );
+    }
     // 204 errors for no content on music player actions
     if (response.status === 204) {
       return undefined as T;
     }
-
     return response.json();
   }
 
@@ -66,6 +76,12 @@ export class SpotifyClient {
     );
   }
 
+  async getTopTracks(limit = 50): Promise<SpotifyPagingObject<SpotifyTrack>> {
+    return this.fetch(
+      `/me/top/tracks?offset=0&limit=${limit}&time_range=medium_term`,
+    );
+  }
+
   // not in use
   async getArtistDetails(artistId: string): Promise<SpotifyArtist> {
     return this.fetch(`/artists/${artistId}`);
@@ -76,6 +92,13 @@ export class SpotifyClient {
       `/artists/${artistId}/top-tracks?market=US`,
     );
     return res.tracks;
+  }
+
+  async transferPlayback(deviceId: string, play = false) {
+    return this.fetch("/me/player", {
+      method: "PUT",
+      body: JSON.stringify({ device_ids: [deviceId], play }),
+    });
   }
 
   async shuffle(state = true, deviceId: string) {
@@ -91,16 +114,14 @@ export class SpotifyClient {
     });
   }
 
-  async playTrack(
-    deviceId: string,
-    options?: { uris?: string[]; contextUri?: string },
-  ) {
+  async playTrack(deviceId: string, options?: PlayOptions) {
     return this.fetch(`/me/player/play?device_id=${deviceId}`, {
       method: "PUT",
       body: options
         ? JSON.stringify({
             ...(options.uris && { uris: options.uris }),
             ...(options.contextUri && { context_uri: options.contextUri }),
+            ...(options.offsetUri && { offset: { uri: options.offsetUri } }),
           })
         : undefined,
     });

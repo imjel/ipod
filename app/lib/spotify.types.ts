@@ -49,6 +49,12 @@ export interface SpotifyPlaylist {
   };
 }
 
+export interface PlayOptions {
+  uris?: string[];
+  contextUri?: string;
+  offsetUri?: string;
+}
+
 export interface PlaybackState {
   paused: boolean;
   position: number;

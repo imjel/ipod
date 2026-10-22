@@ -5,6 +5,7 @@ import {
   useState,
   useCallback,
   useMemo,
+  useRef,
 } from "react";
 import { createBrowserClient } from "@supabase/ssr";
 import type { Session, SupabaseClient } from "@supabase/supabase-js";
@@ -37,21 +38,24 @@ export function AuthProvider({
     session: initialSession,
     isLoading: false,
     isClientReady: true, // Client is ready immediately now
-    spotifyToken: initialSession?.provider_token ?? null,
   });
+
+  const spotifyTokenRef = useRef<{ access_token: string; expires_at: number }>(
+    null,
+  ); // is there a usable spotify token; exp 1 hr
+  const promiseRef = useRef<Promise<string | null>>(null); // if a request is happening right now, this ref has value
 
   useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
       setState((prev) => ({
         ...prev,
         user: session?.user ?? null,
         session,
-        spotifyToken: session?.provider_token ?? null,
       }));
+      if (event === "SIGNED_OUT") spotifyTokenRef.current = null;
     });
-
     return () => subscription.unsubscribe();
   }, [supabase]);
 
@@ -68,33 +72,62 @@ export function AuthProvider({
   }, [supabase]);
 
   const signOut = useCallback(async () => {
+    await fetch("/api/spotify/token", { method: "DELETE" });
+    spotifyTokenRef.current = null;
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
   }, [supabase]);
 
-  const getSpotifyAccessToken = useCallback(async (): Promise<
-    string | null
-  > => {
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
+  const getSpotifyAccessToken = useCallback(
+    async (force?: boolean): Promise<string | null> => {
+      if (!force) {
+        // check if we have a valid spotify token in memory
+        if (
+          spotifyTokenRef.current !== null &&
+          spotifyTokenRef.current.expires_at > Date.now() + 60_000
+        ) {
+          return spotifyTokenRef.current.access_token;
+        }
+      }
 
-    if (session?.provider_token) {
-      return session.provider_token;
-    }
+      // if request is in flight, await result and return
+      if (promiseRef.current !== null) {
+        return promiseRef.current;
+      }
 
-    const {
-      data: { session: refreshedSession },
-      error,
-    } = await supabase.auth.refreshSession();
+      // otherwise, refresh token from spotify
+      const refresh = async (): Promise<string | null> => {
+        const response = await fetch("/api/spotify/token", {
+          method: "POST",
+        });
 
-    if (error || !refreshedSession?.provider_token) {
-      console.error("Failed to get Spotify token:", error);
-      return null;
-    }
+        if (!response.ok) {
+          if (response.status === 401) {
+            signOut().catch(console.error);
+          }
+          spotifyTokenRef.current = null;
+          return null;
+        }
 
-    return refreshedSession.provider_token;
-  }, [supabase]);
+        const { access_token, expires_at } = await response.json();
+        spotifyTokenRef.current = { access_token, expires_at };
+
+        return access_token;
+      };
+
+      promiseRef.current = refresh();
+
+      try {
+        return await promiseRef.current;
+      } catch (error) {
+        spotifyTokenRef.current = null;
+        return null;
+      } finally {
+        promiseRef.current = null;
+      }
+    },
+    [signOut],
+  );
 
   const value: AuthContextValue = {
     ...state,

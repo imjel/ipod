@@ -4,7 +4,7 @@ import Screen from "./screen";
 import { type iPodRoute } from "./routes/routes";
 import { useAuth } from "~/context/AuthContext";
 import { usePlayback } from "~/context/PlaybackContext";
-import type { SpotifyTrack } from "~/lib/spotify.types";
+import type { PlayOptions, SpotifyTrack } from "~/lib/spotify.types";
 import { useSpotify } from "~/hooks/useSpotify";
 import { getStaticMenuItems } from "./routes/routes";
 import { useMenuItems } from "~/hooks/useMenuItems";
@@ -18,19 +18,35 @@ export default function Body() {
   const { signOut } = useAuth();
   const { currentTrack, togglePlayPause, next, prev, deviceId } = usePlayback();
   const prevTrackRef = useRef<SpotifyTrack | null>(null);
-  const { itemRef, handleMouseDown, handleMouseMove, resetPosition } =
-    useDragToRotate();
+  const { itemRef, resetPosition } = useDragToRotate();
 
   const shuffle = useCallback(async () => {
     if (!isReady || !deviceId) return;
-    await client.shuffle(true, deviceId);
-    await client.play(deviceId);
+    try {
+      // the web sdk device stays idle until playback is transferred
+      await client.transferPlayback(deviceId);
+
+      const shuffledTracks = await client.getTopTracks();
+      const uris = shuffledTracks.items.map((track) => track.uri);
+      if (!uris.length) return;
+
+      // randomise the uri order
+      for (let i = uris.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [uris[i], uris[j]] = [uris[j], uris[i]];
+      }
+
+      await client.shuffle(true, deviceId);
+      await client.playTrack(deviceId, { uris });
+    } catch (err) {
+      console.error("Shuffle failed:", err);
+    }
   }, [client, isReady, deviceId]);
 
   const playTrack = useCallback(
-    async (uri: string) => {
+    async (options: PlayOptions) => {
       if (!deviceId) return;
-      await client.playTrack(deviceId, { uris: [uri] });
+      await client.playTrack(deviceId, options);
     },
     [client, deviceId],
   );
@@ -47,7 +63,9 @@ export default function Body() {
     if (!menuItems) return;
     const currentItem = menuItems[selectedIndex];
     if (!currentItem) return;
-    currentItem.action?.();
+    Promise.resolve(currentItem.action?.()).catch((err) =>
+      console.error(`Menu action "${currentItem.label}" failed:`, err),
+    );
     const route = currentItem.route;
     if (route) {
       setMenuStack((prev) => [...prev, route]);
@@ -123,13 +141,10 @@ export default function Body() {
   }, [handleSelect, handleScroll]);
 
   return (
-    <div className="ipod-scene flex flex-col items-center gap-2 pt-10">
-      <div
-        ref={itemRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        className="ipod"
-      >
+    <div
+      className={`ipod-scene flex flex-col items-center gap-2 pt-10 ${currentScreen.screen === "Solitaire" ? "ipod-game-scene" : ""}`}
+    >
+      <div ref={itemRef} className="ipod">
         <div className="ipod-body ipod-body-front">
           <div className="flex flex-col w-full">
             <div className="absolute left-1/2 -translate-x-1/2 mt-[24.5px]">
