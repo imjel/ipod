@@ -39,6 +39,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
       SUPABASE_URL: process.env.SUPABASE_URL!,
       SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY!,
     },
+    headers,
   };
 }
 
