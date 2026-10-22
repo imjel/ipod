@@ -1,4 +1,5 @@
 import {
+  data,
   isRouteErrorResponse,
   Links,
   Meta,
@@ -33,14 +34,16 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  return {
-    session,
-    env: {
-      SUPABASE_URL: process.env.SUPABASE_URL!,
-      SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY!,
+  return data(
+    {
+      session,
+      env: {
+        SUPABASE_URL: process.env.SUPABASE_URL!,
+        SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY!,
+      },
     },
-    headers,
-  };
+    { headers },
+  );
 }
 
 export function Layout({ children }: { children: React.ReactNode }) {

@@ -48,15 +48,14 @@ export function AuthProvider({
   useEffect(() => {
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
       setState((prev) => ({
         ...prev,
         user: session?.user ?? null,
         session,
       }));
-      spotifyTokenRef.current = null;
+      if (event === "SIGNED_OUT") spotifyTokenRef.current = null;
     });
-
     return () => subscription.unsubscribe();
   }, [supabase]);
 
@@ -104,7 +103,7 @@ export function AuthProvider({
 
         if (!response.ok) {
           if (response.status === 401) {
-            signOut();
+            signOut().catch(console.error);
           }
           spotifyTokenRef.current = null;
           return null;
@@ -127,7 +126,7 @@ export function AuthProvider({
         promiseRef.current = null;
       }
     },
-    [],
+    [signOut],
   );
 
   const value: AuthContextValue = {
