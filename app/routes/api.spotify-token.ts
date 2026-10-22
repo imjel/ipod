@@ -30,7 +30,7 @@ export async function action({ request }: Route.ActionArgs) {
     request.headers.get("Cookie") ?? "",
   ).find((c) => c.name === SPOTIFY_REFRESH_COOKIE)?.value;
   if (!refreshToken) {
-    return data({ status: 401 }, { headers });
+    return data({ error: "no refresh token" }, { status: 401, headers });
   }
 
   const basic =
@@ -52,7 +52,7 @@ export async function action({ request }: Route.ActionArgs) {
   });
 
   if (!response.ok) {
-    return data({ status: 401 }, { headers });
+    return data({ error: response.statusText }, { status: 401, headers });
   }
 
   const json = await response.json();
