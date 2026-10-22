@@ -91,6 +91,10 @@ body {
   perspective: 500px;
 }
 
+.ipod-game-scene {
+  zoom: 1.9;
+}
+
 .ipod {
   width: 305px;
   height: 690px;

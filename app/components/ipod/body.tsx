@@ -141,7 +141,9 @@ export default function Body() {
   }, [handleSelect, handleScroll]);
 
   return (
-    <div className="ipod-scene flex flex-col items-center gap-2 pt-10">
+    <div
+      className={`ipod-scene flex flex-col items-center gap-2 pt-10 ${currentScreen.screen === "Solitaire" ? "ipod-game-scene" : ""}`}
+    >
       <div ref={itemRef} className="ipod">
         <div className="ipod-body ipod-body-front">
           <div className="flex flex-col w-full">

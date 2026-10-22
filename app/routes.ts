@@ -5,7 +5,4 @@ export default [
   route("callback", "routes/callback.ts"),
   route("solitaire", "routes/solitaire.tsx"),
   route("api/spotify/token", "routes/api.spotify-token.ts"),
-  // route("auth", "routes/auth.tsx"),
-  // route("playlists", "routes/playlists.tsx"),
-  // route ("settings", "routes/settings.tsx"),
 ] satisfies RouteConfig;
